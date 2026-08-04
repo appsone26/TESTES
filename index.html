@@ -120,16 +120,42 @@ footer a{color:var(--fg2)}
 
 @media (max-width:720px){
   header{padding:14px 18px}
-  .destaque{flex-direction:column}
-  .cartaz{width:100%; aspect-ratio:4/5; max-height:400px}
-  .corpo{padding:26px 20px}
-  .titulo{font-size:30px}
+  .cartaz{width:210px}
+  .corpo{padding:22px 20px}
+  .titulo{font-size:27px}
+  .resumo{font-size:13.5px}
   section{padding:22px 20px}
   .pilares{grid-template-columns:1fr}
   footer{padding:16px 20px}
   .linha{gap:12px; padding:11px 12px}
   .mini{width:58px; height:58px}
   .linha h3{font-size:17px}
+}
+@media (max-width:520px){
+  header{padding:11px 14px}
+  .marca{font-size:20px}
+  .destaque{padding:16px 14px; gap:12px; border-bottom:1px solid var(--line)}
+  .cartaz{width:38%; min-width:118px; max-width:150px; border-radius:4px}
+  .cartaz .c1{width:112px; height:112px; left:-34px; top:-28px}
+  .cartaz .c2{width:100%; height:34px; bottom:60px}
+  .cartaz .c3{width:44px; height:44px; right:-10px; bottom:82px}
+  .cartaz .txt{left:11px; right:11px; bottom:18px}
+  .cartaz .dia{font-size:26px}
+  .cartaz .loc{font-size:7px; letter-spacing:.14em; margin-top:4px}
+  .selo{font-size:7px; padding:3px 5px; top:6px; right:6px}
+  .corpo{padding:0}
+  .eyebrow{font-size:8px; margin-bottom:7px}
+  .titulo{font-size:21px; margin-bottom:8px}
+  .quando{font-size:8.5px; letter-spacing:.13em; margin-bottom:9px}
+  .resumo{font-size:11.5px; margin-bottom:12px}
+  .acoes{flex-direction:column; gap:6px}
+  .cta,.cta2{width:100%; text-align:center; padding:10px 8px; font-size:12px}
+  section{padding:16px 14px}
+  .frase{font-size:18px}
+  .mini{width:50px; height:50px}
+  .linha{gap:11px; padding:10px 11px}
+  .linha h3{font-size:15.5px}
+  footer{padding:14px}
 }
 :focus-visible{outline:2px solid var(--gt); outline-offset:2px}
 </style>
