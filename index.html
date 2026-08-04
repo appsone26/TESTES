@@ -1,524 +1,323 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="">
+<html lang="pt-BR" data-tema="escuro">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MOCKUP S84 — Alertas: lista, kanban e agenda</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ADV+ — maquete da página de eventos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#0B1120; --bg-2:#0F1A2E; --panel:rgba(255,255,255,.04); --panel-2:#101a2c;
-    --line:#1d2a3d; --cyan:#22D3EE; --blue:#3B82F6; --blue-deep:#1e40af;
-    --text:#E5EDF5; --muted:#9FB3C8; --muted-2:#6b7f95;
-    --ok:#34D399; --warn:#FBBF24; --danger:#F87171;
-    --radius:14px; --maxw:1180px;
+:root{
+  --bg:#0B1626; --card:#111F35; --line:#22344F;
+  --fg:#DCE3EC; --fg2:#8497AF; --hd:#FFFFFF;
+  --gt:#C9A15A; --gb:#C9A15A; --go:#0B1626;
+}
+html[data-tema="claro"]{
+  --bg:#FBFAF7; --card:#FFFFFF; --line:#E1DBD0;
+  --fg:#1C2B40; --fg2:#5F6E80; --hd:#0B1626;
+  --gt:#8A6A2A; --gb:#C9A15A; --go:#0B1626;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:'Inter',system-ui,sans-serif; font-size:15px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.ser{font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; color:var(--hd)}
+.wrap{max-width:960px; margin:0 auto}
+.aviso{
+  background:var(--gb); color:var(--go); text-align:center;
+  padding:8px 16px; font-size:12px; font-weight:500;
+}
 
-    /* escala de urgência — a cor sai da prioridade, não do capricho */
-    --t-prazo:#F87171;
-    --t-audiencia:#FB923C;
-    --t-pericia:#FBBF24;
-    --t-reuniao:#3B82F6;
-    --t-evento:#22D3EE;
-    --t-primeiro:#34D399;
-  }
-  html.tema-claro{
-    --bg:#f0f2f7; --bg-2:#e8eaf0; --panel:rgba(255,255,255,.85); --panel-2:#ffffff;
-    --line:#d0d6e8; --cyan:#4f46e5; --blue:#3b82f6;
-    --text:#1a2035; --muted:#5a6a82; --muted-2:#8494a8;
-    --ok:#16a34a; --warn:#b45309; --danger:#dc2626;
-    --t-prazo:#dc2626; --t-audiencia:#ea580c; --t-pericia:#b45309;
-    --t-reuniao:#3b82f6; --t-evento:#4f46e5; --t-primeiro:#16a34a;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);
-       font:14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:18px 16px 60px}
+header{
+  display:flex; align-items:center; gap:12px;
+  padding:16px 24px; border-bottom:1px solid var(--line);
+}
+.marca{font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:26px; color:var(--hd)}
+.marca span{color:var(--gt)}
+.espaco{flex:1}
+.pill{
+  font-family:'Inter',sans-serif; font-size:13px;
+  border:1px solid var(--line); border-radius:22px;
+  padding:7px 15px; cursor:pointer;
+  display:inline-flex; align-items:center; gap:7px;
+}
+.entrar{font-size:13px; color:var(--fg2); text-decoration:none}
 
-  .nota{border:1px dashed var(--cyan);border-radius:var(--radius);padding:12px 14px;
-        margin-bottom:18px;color:var(--muted);font-size:12.5px;background:var(--panel)}
-  .nota b{color:var(--text)}
+.destaque{display:flex; border-bottom:1px solid var(--line)}
+.cartaz{width:300px; flex:none; aspect-ratio:4/5; position:relative; overflow:hidden; background:#EFE7D6}
+.cartaz .c1{position:absolute; width:230px; height:230px; border-radius:50%; background:#C9A15A; left:-70px; top:-56px}
+.cartaz .c2{position:absolute; width:300px; height:78px; background:#1C3454; left:0; bottom:118px}
+.cartaz .c3{position:absolute; width:92px; height:92px; border-radius:50%; background:#C4653F; right:-22px; bottom:160px}
+.cartaz .txt{position:absolute; left:24px; right:24px; bottom:44px}
+.cartaz .dia{font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:54px; line-height:.95; color:#12233B}
+.cartaz .loc{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.18em; color:#5A4A2E; margin-top:10px}
+.selo{
+  position:absolute; top:11px; right:11px;
+  background:rgba(18,35,59,.86); color:#EFE7D6;
+  font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.1em;
+  padding:5px 8px; border-radius:4px;
+}
+.corpo{flex:1; min-width:0; padding:36px 34px; display:flex; flex-direction:column; justify-content:center}
+.eyebrow{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; color:var(--fg2); margin-bottom:14px}
+.titulo{font-size:38px; line-height:1.08; margin:0 0 15px}
+.quando{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; color:var(--gt); margin-bottom:15px}
+.resumo{font-size:14.5px; color:var(--fg2); margin:0 0 24px; max-width:44ch}
+.acoes{display:flex; gap:10px; flex-wrap:wrap}
+.cta{
+  background:var(--gb); color:var(--go); font-size:14px; font-weight:500;
+  padding:13px 28px; border-radius:6px; text-decoration:none; display:inline-block;
+}
+.cta2{
+  border:1px solid var(--line); color:var(--fg2); font-size:13.5px;
+  padding:13px 20px; border-radius:6px; text-decoration:none; display:inline-block;
+}
 
-  h1{font-size:22px;margin:0;letter-spacing:-.3px}
-  .head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
-  .spacer{flex:1}
+section{padding:28px 34px; border-bottom:1px solid var(--line)}
+.linha{
+  display:flex; gap:16px; align-items:center;
+  background:var(--card); border:1px solid var(--line);
+  border-radius:8px; padding:13px 16px; margin-bottom:11px;
+}
+.mini{width:74px; height:74px; flex:none; border-radius:6px; position:relative; overflow:hidden}
+.mini i{position:absolute; display:block}
+.linha h3{font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:20px; line-height:1.2; color:var(--hd); margin:0}
+.linha .quando{margin:5px 0 0}
+.part{font-size:13px; color:var(--fg2); flex:none; text-decoration:none}
+.oculto{display:none}
+.centro{text-align:center; padding-top:6px}
 
-  .seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);
-       border-radius:10px;padding:3px;gap:2px}
-  .seg button{border:0;background:transparent;color:var(--muted);padding:7px 14px;
-       border-radius:8px;cursor:pointer;font-size:13px;font-weight:600}
-  .seg button.on{background:var(--blue);color:#fff}
-  .seg.sub button.on{background:rgba(59,130,246,.16);color:var(--cyan)}
+.sobre{text-align:center}
+.risco{width:48px; height:1px; background:var(--gb); margin:0 auto 18px}
+.frase{font-size:22px; line-height:1.45; max-width:26ch; margin:0 auto 22px}
+.pilares{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:11px; text-align:left; margin-bottom:22px}
+.pilar{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:15px 16px}
+.pilar b{display:block; font-size:13.5px; font-weight:500; color:var(--fg); margin-bottom:5px}
+.pilar span{font-size:12.5px; color:var(--fg2); line-height:1.5}
 
-  .btn{border:1px solid var(--line);background:var(--panel);color:var(--text);
-       padding:8px 14px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600}
-  .btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
+.redes{display:flex; align-items:center; gap:18px; flex-wrap:wrap}
+.redes .txt{flex:1; min-width:200px}
+.redes b{display:block; font-size:14px; font-weight:500; margin-bottom:4px}
+.redes p{margin:0; font-size:13px; color:var(--fg2)}
+.rede{
+  border:1px solid var(--line); border-radius:6px; padding:10px 15px;
+  font-size:13px; color:var(--fg); text-decoration:none;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.rede.so{width:42px; height:42px; padding:0; justify-content:center}
+.ic{width:18px; height:18px; display:block}
 
-  .filtros{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
-  .filtros select,.filtros input{background:var(--panel-2);color:var(--text);
-       border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:13px}
+footer{
+  padding:18px 34px; display:flex; gap:16px; flex-wrap:wrap; align-items:center;
+  font-size:12px; color:var(--fg2);
+}
+footer a{color:var(--fg2)}
+.selo-mono{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em}
 
-  /* ---------- selo de tipo ---------- */
-  .tipo{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;
-        letter-spacing:.4px;text-transform:uppercase}
-  .tipo i{width:8px;height:8px;border-radius:50%;background:currentColor;display:block}
-  .t-prazo{color:var(--t-prazo)} .t-audiencia{color:var(--t-audiencia)}
-  .t-pericia{color:var(--t-pericia)} .t-reuniao{color:var(--t-reuniao)}
-  .t-evento{color:var(--t-evento)} .t-primeiro{color:var(--t-primeiro)}
-
-  /* ---------- lista ---------- */
-  .diagrupo{margin:20px 0 8px;display:flex;align-items:baseline;gap:10px}
-  .diagrupo b{font-size:13px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
-  .diagrupo span{font-size:12px;color:var(--muted-2)}
-  .diagrupo.hoje b{color:var(--cyan)}
-  .item{display:flex;gap:12px;align-items:flex-start;background:var(--panel-2);
-        border:1px solid var(--line);border-left-width:3px;border-radius:12px;
-        padding:12px 14px;margin-bottom:8px;cursor:pointer}
-  .item:hover{border-color:var(--blue)}
-  .item .hora{font-variant-numeric:tabular-nums;font-weight:700;font-size:13px;
-        min-width:46px;color:var(--text)}
-  .item .corpo{flex:1;min-width:0}
-  .item .titulo{font-weight:600;margin-bottom:3px}
-  .item .sub{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;
-        text-overflow:ellipsis}
-  .item .ult{font-size:12px;color:var(--muted-2);margin-top:5px;
-        border-top:1px dashed var(--line);padding-top:5px}
-  .item .ult b{color:var(--muted);font-weight:600}
-  .pill{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);
-        color:var(--muted);white-space:nowrap}
-  .pill.atraso{color:var(--danger);border-color:var(--danger)}
-  .item.atrasado{border-left-color:var(--danger)!important}
-  .it-prazo{border-left-color:var(--t-prazo)} .it-audiencia{border-left-color:var(--t-audiencia)}
-  .it-pericia{border-left-color:var(--t-pericia)} .it-reuniao{border-left-color:var(--t-reuniao)}
-  .it-evento{border-left-color:var(--t-evento)} .it-primeiro{border-left-color:var(--t-primeiro)}
-
-  /* ---------- kanban ---------- */
-  .kb{display:flex;gap:12px;overflow-x:auto;padding-bottom:12px}
-  .col{flex:0 0 236px;background:var(--panel);border:1px solid var(--line);
-       border-radius:12px;padding:10px;max-height:560px;overflow-y:auto}
-  .col h4{margin:2px 4px 10px;font-size:12px;letter-spacing:.6px;text-transform:uppercase;
-       display:flex;align-items:center;gap:7px}
-  .col h4 em{margin-left:auto;font-style:normal;font-size:11px;color:var(--muted-2);
-       background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:1px 7px}
-  .kdia{font-size:11px;color:var(--muted-2);letter-spacing:.4px;text-transform:uppercase;
-       margin:10px 4px 6px;padding-top:8px;border-top:1px dashed var(--line)}
-  .kdia:first-of-type{border-top:0;padding-top:0;margin-top:2px}
-  .kcard{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
-       padding:9px 10px;margin-bottom:7px;cursor:pointer}
-  .kcard:hover{border-color:var(--blue)}
-  .kcard .kt{font-weight:600;font-size:13px;margin-bottom:3px}
-  .kcard .kh{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-  .kcard .kp{font-size:11.5px;color:var(--muted-2);margin-top:4px;white-space:nowrap;
-       overflow:hidden;text-overflow:ellipsis}
-  .kvazio{font-size:12px;color:var(--muted-2);padding:14px 6px;text-align:center}
-
-  /* ---------- agenda mês ---------- */
-  .mes{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-  .dow{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted-2);
-       text-align:center;padding:4px 0}
-  .cel{min-height:96px;background:var(--panel-2);border:1px solid var(--line);
-       border-radius:10px;padding:6px 7px;cursor:pointer}
-  .cel:hover{border-color:var(--blue)}
-  .cel.fora{opacity:.35}
-  .cel.hoje{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan) inset}
-  .cel .n{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px;
-       font-variant-numeric:tabular-nums}
-  .cel.hoje .n{color:var(--cyan)}
-  .ev{display:flex;align-items:center;gap:5px;font-size:11.5px;margin-bottom:3px;
-       white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .ev i{width:6px;height:6px;border-radius:50%;flex:0 0 6px;background:currentColor}
-  .ev span{color:var(--text);overflow:hidden;text-overflow:ellipsis}
-  .ev b{font-variant-numeric:tabular-nums;font-weight:700}
-  .mais{font-size:11px;color:var(--muted-2)}
-
-  /* ---------- modal ---------- */
-  .modal{position:fixed;inset:0;background:rgba(2,6,23,.72);display:none;
-       align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto;z-index:50}
-  .modal.on{display:flex}
-  .box{width:100%;max-width:620px;background:var(--panel-2);border:1px solid var(--line);
-       border-radius:16px;padding:20px}
-  .box h3{margin:0 0 3px;font-size:17px}
-  .msub{color:var(--muted);font-size:12.5px;margin-bottom:16px}
-  .campo{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-  .campo label{flex:1;min-width:140px;font-size:12px;color:var(--muted)}
-  .campo input,.campo select{width:100%;margin-top:4px;background:var(--bg-2);color:var(--text);
-       border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13px}
-  .sec{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
-  .sec h5{margin:0 0 10px;font-size:12px;letter-spacing:.6px;text-transform:uppercase;
-       color:var(--muted)}
-  .hist{list-style:none;margin:0;padding:0 0 0 18px;border-left:2px solid var(--line)}
-  .hist li{position:relative;padding:0 0 14px 14px}
-  .hist li::before{content:'';position:absolute;left:-25px;top:5px;width:9px;height:9px;
-       border-radius:50%;background:var(--muted-2);border:2px solid var(--panel-2)}
-  .hist li.novo::before{background:var(--cyan)}
-  .hist .qd{font-size:11.5px;color:var(--muted-2);font-variant-numeric:tabular-nums;
-       margin-bottom:2px}
-  .hist .txt{font-size:13px}
-  .hist .sis{font-size:12px;color:var(--warn);font-style:italic}
-  .escrever{margin-top:6px}
-  .escrever textarea{width:100%;background:var(--bg-2);color:var(--text);border:1px solid var(--line);
-       border-radius:10px;padding:10px;font:inherit;font-size:13px;min-height:64px;resize:vertical}
-  .acoes{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
-  .aviso{font-size:11.5px;color:var(--muted-2);margin-top:8px}
-
-  .legenda{display:flex;gap:14px;flex-wrap:wrap;margin-top:22px;padding-top:14px;
-       border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
-  .legenda .tipo{font-size:11px}
-
-  .painel{display:none} .painel.on{display:block}
-  @media(max-width:760px){
-    .cel{min-height:70px} .ev span{display:none} .head h1{font-size:19px}
-  }
+@media (max-width:720px){
+  header{padding:14px 18px}
+  .destaque{flex-direction:column}
+  .cartaz{width:100%; aspect-ratio:4/5; max-height:400px}
+  .corpo{padding:26px 20px}
+  .titulo{font-size:30px}
+  section{padding:22px 20px}
+  .pilares{grid-template-columns:1fr}
+  footer{padding:16px 20px}
+  .linha{gap:12px; padding:11px 12px}
+  .mini{width:58px; height:58px}
+  .linha h3{font-size:17px}
+}
+:focus-visible{outline:2px solid var(--gt); outline-offset:2px}
 </style>
 </head>
 <body>
+
+<div class="aviso">Maquete para aprovação — eventos, textos e imagens são ilustrativos</div>
+
 <div class="wrap">
 
-  <div class="nota">
-    <b>Mockup — não é código.</b> Serve para aprovar o desenho antes de qualquer patch.
-    Decisões já fechadas por você e aplicadas aqui: alerta e pendência são <b>a mesma coisa</b>,
-    separadas só pelo tipo · <b>alerta não vincula processo</b> (quem tem processo nasce dentro dele)
-    · <b>Ativos / Finalizados</b> continua sendo o botão que já existe, e finalizado é lista simples
-    · a agenda é o <b>mês</b> · a data <b>não se sobrescreve</b>: remarcar escreve linha no histórico.
-    <br>Clique em qualquer item para ver o modal com histórico.
-    <button class="btn" style="margin-top:8px" onclick="document.documentElement.classList.toggle('tema-claro')">Trocar tema</button>
+<header>
+  <span class="marca">ADV<span>+</span></span>
+  <span class="espaco"></span>
+  <button class="pill" id="btnTema" type="button"
+          style="color:var(--fg); background:var(--card); border-color:var(--line)"
+          aria-label="Alternar entre modo claro e escuro">
+    <svg class="ic" id="icTema" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+    </svg>
+    <span id="txtTema">Modo claro</span>
+  </button>
+  <a class="entrar" href="#">Entrar</a>
+</header>
+
+<div class="destaque">
+  <div class="cartaz">
+    <div class="c1"></div><div class="c2"></div><div class="c3"></div>
+    <div class="txt">
+      <div class="dia">18 SET</div>
+      <div class="loc">CONFRARIA ADV+ · RIO</div>
+    </div>
+    <div class="selo">IMAGEM PROVISÓRIA</div>
   </div>
-
-  <div class="head">
-    <h1>Alertas</h1>
-    <div class="seg" id="segEstado">
-      <button class="on" onclick="estado('ativos',this)">Ativos</button>
-      <button onclick="estado('finalizados',this)">Finalizados</button>
+  <div class="corpo">
+    <div class="eyebrow">PRÓXIMO ENCONTRO</div>
+    <h1 class="ser titulo">Primeiro encontro da confraria</h1>
+    <div class="quando">18 SET · 19H · CENTRO DO RIO</div>
+    <p class="resumo">Uma noite de conversa entre pares sobre o exercício da advocacia no Rio. Encontro gratuito.</p>
+    <div class="acoes">
+      <a class="cta" href="#">Quero participar</a>
+      <a class="cta2" href="#">Ver o vídeo</a>
     </div>
-    <div class="spacer"></div>
-    <div class="seg sub" id="segVisao">
-      <button class="on" onclick="visao('lista',this)">Lista</button>
-      <button onclick="visao('kanban',this)">Kanban</button>
-      <button onclick="visao('agenda',this)">Agenda</button>
-    </div>
-    <button class="btn pri" onclick="abrir('novo')">+ Novo alerta</button>
-  </div>
-
-  <div class="filtros" id="filtros">
-    <select><option>Todos os tipos</option><option>Prazo</option><option>Audiência</option>
-      <option>Perícia</option><option>Reunião</option><option>Evento</option>
-      <option>Primeiro atendimento</option></select>
-    <select><option>Próximos 7 dias</option><option>Hoje</option><option>Próximos 30 dias</option>
-      <option>Tudo</option></select>
-    <select><option>Todos os responsáveis</option><option>Ana Mendes</option><option>Giovana</option></select>
-    <input placeholder="Buscar…">
-  </div>
-
-  <!-- ============ LISTA ============ -->
-  <div class="painel on" id="p-lista">
-    <div class="diagrupo"><b>Atrasado</b><span>1 item</span></div>
-    <div class="item it-prazo atrasado" onclick="abrir('desp')">
-      <div class="hora">—</div>
-      <div class="corpo">
-        <div class="titulo">Despachar com o juiz — 3ª Vara Cível</div>
-        <div class="sub"><span class="tipo t-prazo"><i></i>Prazo</span> · sem processo · Ana Mendes</div>
-        <div class="ult"><b>03/08 ·</b> Recebi mensagem do cartório cobrando</div>
-      </div>
-      <span class="pill atraso">venceu há 2 dias</span>
-    </div>
-
-    <div class="diagrupo hoje"><b>Hoje · segunda, 01/08</b><span>2 itens</span></div>
-    <div class="item it-audiencia" onclick="abrir('aud')">
-      <div class="hora">14:00</div>
-      <div class="corpo">
-        <div class="titulo">Audiência de instrução</div>
-        <div class="sub"><span class="tipo t-audiencia"><i></i>Audiência</span>
-          · Proc. 1005555-66.2024.8.26.0100 · Fórum, sala 03</div>
-      </div>
-      <span class="pill">pendência do processo</span>
-    </div>
-    <div class="item it-reuniao" onclick="abrir('reu')">
-      <div class="hora">16:30</div>
-      <div class="corpo">
-        <div class="titulo">Reunião com o juiz — remarcada</div>
-        <div class="sub"><span class="tipo t-reuniao"><i></i>Reunião</span> · sem processo · Ana Mendes</div>
-        <div class="ult"><b>28/07 ·</b> Juiz não atendeu, remarquei para semana que vem</div>
-      </div>
-    </div>
-
-    <div class="diagrupo"><b>Terça, 02/08</b><span>1 item</span></div>
-    <div class="item it-pericia" onclick="abrir('per')">
-      <div class="hora">09:30</div>
-      <div class="corpo">
-        <div class="titulo">Perícia médica — INSS</div>
-        <div class="sub"><span class="tipo t-pericia"><i></i>Perícia</span>
-          · Proc. 1003333-44.2024.8.26.0100</div>
-      </div>
-      <span class="pill">pendência do processo</span>
-    </div>
-
-    <div class="diagrupo"><b>Sexta, 05/08</b><span>1 item</span></div>
-    <div class="item it-primeiro" onclick="abrir('pa')">
-      <div class="hora">11:00</div>
-      <div class="corpo">
-        <div class="titulo">Primeiro atendimento — Marcos Ribeiro</div>
-        <div class="sub"><span class="tipo t-primeiro"><i></i>Primeiro atendimento</span> · sem processo</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============ KANBAN ============ -->
-  <div class="painel" id="p-kanban">
-    <div class="kb">
-      <div class="col">
-        <h4 class="tipo t-prazo"><i></i>Prazo<em>2</em></h4>
-        <div class="kdia">Atrasado</div>
-        <div class="kcard" onclick="abrir('desp')">
-          <div class="kt">Despachar com o juiz</div>
-          <div class="kh" style="color:var(--danger)">venceu há 2 dias</div>
-          <div class="kp">3ª Vara Cível · sem processo</div>
-        </div>
-        <div class="kdia">Qua, 03/08</div>
-        <div class="kcard" onclick="abrir('novo')">
-          <div class="kt">Apresentar réplica</div>
-          <div class="kh">17:00</div>
-          <div class="kp">Proc. 1012345-67.2024.8.26.0100</div>
-        </div>
-      </div>
-
-      <div class="col">
-        <h4 class="tipo t-audiencia"><i></i>Audiência<em>1</em></h4>
-        <div class="kdia">Hoje, 01/08</div>
-        <div class="kcard" onclick="abrir('aud')">
-          <div class="kt">Audiência de instrução</div>
-          <div class="kh">14:00</div>
-          <div class="kp">Proc. 1005555-66.2024.8.26.0100</div>
-        </div>
-      </div>
-
-      <div class="col">
-        <h4 class="tipo t-pericia"><i></i>Perícia<em>1</em></h4>
-        <div class="kdia">Ter, 02/08</div>
-        <div class="kcard" onclick="abrir('per')">
-          <div class="kt">Perícia médica — INSS</div>
-          <div class="kh">09:30</div>
-          <div class="kp">Proc. 1003333-44.2024.8.26.0100</div>
-        </div>
-      </div>
-
-      <div class="col">
-        <h4 class="tipo t-reuniao"><i></i>Reunião<em>1</em></h4>
-        <div class="kdia">Hoje, 01/08</div>
-        <div class="kcard" onclick="abrir('reu')">
-          <div class="kt">Reunião com o juiz</div>
-          <div class="kh">16:30</div>
-          <div class="kp">remarcada · sem processo</div>
-        </div>
-      </div>
-
-      <div class="col">
-        <h4 class="tipo t-evento"><i></i>Evento<em>0</em></h4>
-        <div class="kvazio">Nada por aqui</div>
-      </div>
-
-      <div class="col">
-        <h4 class="tipo t-primeiro"><i></i>1º atendimento<em>1</em></h4>
-        <div class="kdia">Sex, 05/08</div>
-        <div class="kcard" onclick="abrir('pa')">
-          <div class="kt">Marcos Ribeiro</div>
-          <div class="kh">11:00</div>
-          <div class="kp">sem processo</div>
-        </div>
-      </div>
-    </div>
-    <p class="aviso">Coluna por <b>tipo</b>, cartão agrupado por <b>dia</b>, rolando para frente.
-      Como você disse: é raro um dia ter prazo, audiência e perícia juntos — as colunas ficam magras de propósito.</p>
-  </div>
-
-  <!-- ============ AGENDA ============ -->
-  <div class="painel" id="p-agenda">
-    <div class="head" style="margin-bottom:10px">
-      <button class="btn">‹</button>
-      <b style="font-size:15px">Agosto de 2026</b>
-      <button class="btn">›</button>
-      <div class="spacer"></div>
-      <button class="btn">Hoje</button>
-    </div>
-    <div class="mes">
-      <div class="dow">Dom</div><div class="dow">Seg</div><div class="dow">Ter</div>
-      <div class="dow">Qua</div><div class="dow">Qui</div><div class="dow">Sex</div><div class="dow">Sáb</div>
-
-      <div class="cel fora"><div class="n">26</div></div>
-      <div class="cel fora"><div class="n">27</div></div>
-      <div class="cel fora"><div class="n">28</div>
-        <div class="ev t-reuniao"><i></i><b>16:30</b><span>Reunião juiz</span></div></div>
-      <div class="cel fora"><div class="n">29</div></div>
-      <div class="cel fora"><div class="n">30</div>
-        <div class="ev t-prazo"><i></i><b>—</b><span>Despachar</span></div></div>
-      <div class="cel fora"><div class="n">31</div></div>
-      <div class="cel hoje"><div class="n">1</div>
-        <div class="ev t-audiencia" onclick="abrir('aud')"><i></i><b>14:00</b><span>Audiência</span></div>
-        <div class="ev t-reuniao" onclick="abrir('reu')"><i></i><b>16:30</b><span>Reunião juiz</span></div>
-      </div>
-
-      <div class="cel"><div class="n">2</div>
-        <div class="ev t-pericia" onclick="abrir('per')"><i></i><b>09:30</b><span>Perícia INSS</span></div></div>
-      <div class="cel"><div class="n">3</div>
-        <div class="ev t-prazo"><i></i><b>17:00</b><span>Réplica</span></div></div>
-      <div class="cel"><div class="n">4</div></div>
-      <div class="cel"><div class="n">5</div>
-        <div class="ev t-primeiro" onclick="abrir('pa')"><i></i><b>11:00</b><span>1º atend.</span></div></div>
-      <div class="cel"><div class="n">6</div></div>
-      <div class="cel"><div class="n">7</div></div>
-      <div class="cel"><div class="n">8</div></div>
-
-      <div class="cel"><div class="n">9</div></div>
-      <div class="cel"><div class="n">10</div>
-        <div class="ev t-prazo"><i></i><b>—</b><span>Contestação</span></div>
-        <div class="ev t-reuniao"><i></i><b>10:00</b><span>Cliente</span></div>
-        <div class="ev t-evento"><i></i><b>15:00</b><span>Palestra OAB</span></div>
-        <div class="mais">+1</div></div>
-      <div class="cel"><div class="n">11</div></div>
-      <div class="cel"><div class="n">12</div></div>
-      <div class="cel"><div class="n">13</div>
-        <div class="ev t-audiencia"><i></i><b>09:00</b><span>Audiência</span></div></div>
-      <div class="cel"><div class="n">14</div></div>
-      <div class="cel"><div class="n">15</div></div>
-
-      <div class="cel"><div class="n">16</div></div>
-      <div class="cel"><div class="n">17</div></div>
-      <div class="cel"><div class="n">18</div></div>
-      <div class="cel"><div class="n">19</div></div>
-      <div class="cel"><div class="n">20</div></div>
-      <div class="cel"><div class="n">21</div></div>
-      <div class="cel"><div class="n">22</div></div>
-    </div>
-    <p class="aviso">Na data aparece <b>a hora e o que é</b>. Clicando na data, abre a lista daquele dia;
-      clicando no item, abre o item. Sem grade por hora — a grade exigiria posicionar por horário,
-      o mês só precisa escrever.</p>
-  </div>
-
-  <!-- ============ FINALIZADOS ============ -->
-  <div class="painel" id="p-final">
-    <div class="diagrupo"><b>Concluídos</b><span>lista simples — sem kanban, sem agenda</span></div>
-    <div class="item it-prazo" style="opacity:.72" onclick="abrir('fim')">
-      <div class="hora">—</div>
-      <div class="corpo">
-        <div class="titulo" style="text-decoration:line-through">Protocolar petição inicial</div>
-        <div class="sub"><span class="tipo t-prazo"><i></i>Prazo</span> · Proc. 1002222-33.2024.8.26.0100</div>
-        <div class="ult"><b>17/07 ·</b> Protocolado, número de protocolo anexado</div>
-      </div>
-      <span class="pill">concluído em 17/07</span>
-    </div>
-    <div class="item it-reuniao" style="opacity:.72">
-      <div class="hora">—</div>
-      <div class="corpo">
-        <div class="titulo" style="text-decoration:line-through">Reunião com cliente — Maria Silva</div>
-        <div class="sub"><span class="tipo t-reuniao"><i></i>Reunião</span> · sem processo</div>
-        <div class="ult"><b>16/07 ·</b> Realizada, cliente trouxe os documentos</div>
-      </div>
-      <span class="pill">concluído em 16/07</span>
-    </div>
-  </div>
-
-  <div class="legenda">
-    <span class="tipo t-prazo"><i></i>Prazo</span>
-    <span class="tipo t-audiencia"><i></i>Audiência</span>
-    <span class="tipo t-pericia"><i></i>Perícia</span>
-    <span class="tipo t-reuniao"><i></i>Reunião</span>
-    <span class="tipo t-evento"><i></i>Evento</span>
-    <span class="tipo t-primeiro"><i></i>Primeiro atendimento</span>
-    <span style="margin-left:auto;color:var(--muted-2)">a cor desce pela urgência: prazo é o vermelho mais forte</span>
   </div>
 </div>
 
-<!-- ============ MODAL ============ -->
-<div class="modal" id="modal" onclick="if(event.target===this)fechar()">
-  <div class="box">
-    <h3 id="mtit">Despachar com o juiz — 3ª Vara Cível</h3>
-    <div class="msub" id="msub">Prazo · criado em 01/08 · Ana Mendes · sem processo vinculado</div>
+<section>
+  <div class="eyebrow">TAMBÉM NA AGENDA</div>
 
-    <div class="campo">
-      <label>Tipo
-        <select><option>Prazo</option><option>Audiência</option><option>Perícia</option>
-          <option>Reunião</option><option>Evento</option><option>Primeiro atendimento</option></select>
-      </label>
-      <label>Data
-        <input type="date" value="2026-08-03">
-      </label>
-      <label>Hora
-        <input type="time" value="14:00">
-      </label>
+  <div class="linha">
+    <div class="mini" style="background:#DCE8DE">
+      <i style="width:62px;height:62px;border-radius:50%;background:#6E9B7A;left:-16px;top:-14px"></i>
+      <i style="width:28px;height:28px;background:#2E4A38;right:9px;bottom:10px"></i>
     </div>
+    <div style="flex:1;min-width:0">
+      <h3>Mesa sobre honorários</h3>
+      <div class="quando">02 OUT · ON-LINE</div>
+    </div>
+    <a class="part" href="#">Participar</a>
+  </div>
 
-    <div class="sec">
-      <h5>Histórico — escreve embaixo, nunca substitui</h5>
-      <ul class="hist">
-        <li>
-          <div class="qd">01/08 · 09:12 · Ana Mendes</div>
-          <div class="txt">Criada a pendência: preciso ir despachar com o juiz antes do dia 05.</div>
-        </li>
-        <li>
-          <div class="qd">02/08 · 18:40 · Ana Mendes</div>
-          <div class="txt">Estive no tribunal, o juiz não estava. Volto quinta.</div>
-        </li>
-        <li>
-          <div class="qd">02/08 · 18:41 · sistema</div>
-          <div class="sis">Data alterada de 02/08 para 05/08</div>
-        </li>
-        <li class="novo">
-          <div class="qd">03/08 · 10:05 · Ana Mendes</div>
-          <div class="txt">Recebi mensagem do cartório cobrando o despacho.</div>
-        </li>
-      </ul>
+  <div class="linha">
+    <div class="mini" style="background:#E3E7F2">
+      <i style="width:74px;height:27px;background:#4F6FA8;left:0;top:16px"></i>
+      <i style="width:36px;height:36px;border-radius:50%;background:#1C3454;right:-9px;bottom:-9px"></i>
+    </div>
+    <div style="flex:1;min-width:0">
+      <h3>Encontro de recém-formados</h3>
+      <div class="quando">21 OUT · BOTAFOGO</div>
+    </div>
+    <a class="part" href="#">Participar</a>
+  </div>
 
-      <div class="escrever">
-        <textarea placeholder="Escrever a próxima atualização…"></textarea>
-        <p class="aviso">Trocar a data acima escreve uma linha sozinha, como a de 02/08.
-          Nada do que já foi escrito pode ser apagado.</p>
+  <div id="mais" class="oculto">
+    <div class="linha">
+      <div class="mini" style="background:#F5E2D8">
+        <i style="width:50px;height:50px;border-radius:50%;background:#C4653F;right:-12px;top:-12px"></i>
+        <i style="width:74px;height:20px;background:#7A3D24;left:0;bottom:13px"></i>
       </div>
+      <div style="flex:1;min-width:0">
+        <h3>Oficina de petição inicial</h3>
+        <div class="quando">08 NOV · TIJUCA</div>
+      </div>
+      <a class="part" href="#">Participar</a>
     </div>
-
-    <div class="acoes">
-      <button class="btn" onclick="fechar()">Fechar</button>
-      <button class="btn" onclick="fechar()">Salvar atualização</button>
-      <button class="btn pri" onclick="fechar()">Concluir</button>
+    <div class="linha">
+      <div class="mini" style="background:#F0E6CE">
+        <i style="width:56px;height:56px;background:#C9A15A;left:-12px;bottom:-14px"></i>
+        <i style="width:24px;height:24px;border-radius:50%;background:#5A4A2E;right:11px;top:11px"></i>
+      </div>
+      <div style="flex:1;min-width:0">
+        <h3>Confraternização de fim de ano</h3>
+        <div class="quando">12 DEZ · LEBLON</div>
+      </div>
+      <a class="part" href="#">Participar</a>
     </div>
   </div>
+
+  <div class="centro">
+    <button class="pill" id="btnMais" type="button"
+            style="color:var(--fg); background:var(--card); border-color:var(--line)">
+      <span id="txtMais">Ver mais</span>
+      <svg class="ic" id="icMais" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M6 9l6 6 6-6"></path>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<section class="sobre">
+  <div class="risco"></div>
+  <p class="ser frase">Uma confraria de profissionais do Direito no Rio de Janeiro.</p>
+  <div class="pilares">
+    <div class="pilar"><b>Encontros</b><span>Reuniões e formação entre membros.</span></div>
+    <div class="pilar"><b>Diretório</b><span>Quem é quem, só para quem faz parte.</span></div>
+    <div class="pilar"><b>Parceria</b><span>Indicação e apoio entre pares.</span></div>
+  </div>
+  <a class="cta2" href="#">Solicitar cadastro</a>
+</section>
+
+<section class="redes">
+  <div class="txt">
+    <b>Veja como foram os encontros anteriores</b>
+    <p>Vídeos, fotos e bastidores no nosso Instagram.</p>
+  </div>
+  <div style="display:flex;gap:9px">
+    <a class="rede" href="#">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="var(--gt)" stroke-width="1.7" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+        <circle cx="12" cy="12" r="4"></circle>
+        <circle cx="17.5" cy="6.5" r="1.1" fill="var(--gt)" stroke="none"></circle>
+      </svg>
+      @advmaisrj
+    </a>
+    <a class="rede so" href="#" aria-label="Facebook">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+        <path d="M14 8h2.5V5H14c-2 0-3.2 1.2-3.2 3.2V11H8.5v3h2.3v6h3v-6H16l.5-3h-2.7V8.6c0-.4.2-.6.7-.6z"></path>
+      </svg>
+    </a>
+    <a class="rede so" href="#" aria-label="YouTube">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+        <rect x="2.5" y="6" width="19" height="12" rx="3.5"></rect>
+        <path d="M10.5 9.5l4.5 2.5-4.5 2.5z"></path>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <span class="selo-mono">CRESCIMENTO · NETWORKING · CONFRARIA</span>
+  <span class="espaco"></span>
+  <a href="#">Política de Privacidade</a>
+</footer>
+
 </div>
 
 <script>
-  function visao(v,btn){
-    document.querySelectorAll('#segVisao button').forEach(b=>b.classList.remove('on'));
-    btn.classList.add('on');
-    ['lista','kanban','agenda'].forEach(x=>{
-      document.getElementById('p-'+x).classList.toggle('on', x===v);
-    });
-  }
-  function estado(e,btn){
-    document.querySelectorAll('#segEstado button').forEach(b=>b.classList.remove('on'));
-    btn.classList.add('on');
-    var ativo = (e==='ativos');
-    document.getElementById('segVisao').style.display = ativo ? '' : 'none';
-    document.getElementById('filtros').style.display = ativo ? '' : 'none';
-    document.getElementById('p-final').classList.toggle('on', !ativo);
-    if(ativo){
-      var on = document.querySelector('#segVisao button.on');
-      visao(on ? on.textContent.toLowerCase() : 'lista', on);
-    } else {
-      ['lista','kanban','agenda'].forEach(x=>document.getElementById('p-'+x).classList.remove('on'));
-    }
-  }
-  var TITULOS = {
-    desp:['Despachar com o juiz — 3ª Vara Cível','Prazo · criado em 01/08 · Ana Mendes · sem processo vinculado'],
-    aud :['Audiência de instrução','Audiência · Proc. 1005555-66.2024.8.26.0100 · nasceu dentro do processo'],
-    reu :['Reunião com o juiz','Reunião · criada em 20/07 · Ana Mendes · sem processo vinculado'],
-    per :['Perícia médica — INSS','Perícia · Proc. 1003333-44.2024.8.26.0100 · nasceu dentro do processo'],
-    pa  :['Primeiro atendimento — Marcos Ribeiro','Primeiro atendimento · criado em 30/07 · sem processo vinculado'],
-    fim :['Protocolar petição inicial','Prazo · concluído em 17/07 · Proc. 1002222-33.2024.8.26.0100'],
-    novo:['Novo alerta','O alerta criado aqui não vincula processo. Para algo do processo, crie a pendência dentro dele.']
-  };
-  function abrir(k){
-    var t = TITULOS[k] || TITULOS.desp;
-    document.getElementById('mtit').textContent = t[0];
-    document.getElementById('msub').textContent = t[1];
-    document.getElementById('modal').classList.add('on');
-  }
-  function fechar(){ document.getElementById('modal').classList.remove('on'); }
-  document.addEventListener('keydown', e=>{ if(e.key==='Escape') fechar(); });
+(function () {
+  var raiz = document.documentElement;
+  var btn  = document.getElementById('btnTema');
+  var txt  = document.getElementById('txtTema');
+  var ic   = document.getElementById('icTema');
+
+  var SOL = '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>';
+  var LUA = '<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"></path>';
+
+  btn.addEventListener('click', function () {
+    var escuro = raiz.getAttribute('data-tema') === 'escuro';
+    raiz.setAttribute('data-tema', escuro ? 'claro' : 'escuro');
+    txt.textContent = escuro ? 'Modo escuro' : 'Modo claro';
+    ic.innerHTML = escuro ? LUA : SOL;
+  });
+
+  var bm = document.getElementById('btnMais');
+  var tm = document.getElementById('txtMais');
+  var im = document.getElementById('icMais');
+  var cx = document.getElementById('mais');
+
+  bm.addEventListener('click', function () {
+    var fechado = cx.classList.contains('oculto');
+    cx.classList.toggle('oculto');
+    tm.textContent = fechado ? 'Ver menos' : 'Ver mais';
+    im.innerHTML = fechado
+      ? '<path d="M18 15l-6-6-6 6"></path>'
+      : '<path d="M6 9l6 6 6-6"></path>';
+  });
+})();
 </script>
+
 </body>
 </html>
