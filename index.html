@@ -49,7 +49,14 @@ header{
 .entrar{font-size:13px; color:var(--fg2); text-decoration:none}
 
 .destaque{display:flex; border-bottom:1px solid var(--line)}
-.cartaz{width:300px; flex:none; aspect-ratio:4/5; position:relative; overflow:hidden; background:#EFE7D6}
+.destaque{
+  display:grid;
+  grid-template-columns:300px minmax(0,1fr);
+  grid-template-areas:"cartaz corpo" "cartaz acoes";
+  column-gap:34px;
+  border-bottom:1px solid var(--line);
+}
+.cartaz{grid-area:cartaz; width:300px; aspect-ratio:4/5; position:relative; overflow:hidden; background:#EFE7D6}
 .cartaz .c1{position:absolute; width:230px; height:230px; border-radius:50%; background:#C9A15A; left:-70px; top:-56px}
 .cartaz .c2{position:absolute; width:300px; height:78px; background:#1C3454; left:0; bottom:118px}
 .cartaz .c3{position:absolute; width:92px; height:92px; border-radius:50%; background:#C4653F; right:-22px; bottom:160px}
@@ -62,12 +69,17 @@ header{
   font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.1em;
   padding:5px 8px; border-radius:4px;
 }
-.corpo{flex:1; min-width:0; padding:36px 34px; display:flex; flex-direction:column; justify-content:center}
+.corpo{grid-area:corpo; align-self:start; min-width:0; padding:36px 34px 0 0}
 .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; color:var(--fg2); margin-bottom:14px}
 .titulo{font-size:38px; line-height:1.08; margin:0 0 15px}
 .quando{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; color:var(--gt); margin-bottom:15px}
-.resumo{font-size:14.5px; color:var(--fg2); margin:0 0 24px; max-width:44ch}
-.acoes{display:flex; gap:10px; flex-wrap:wrap}
+.resumo{font-size:14.5px; color:var(--fg2); margin:0 0 20px; max-width:46ch}
+.meta{display:flex; gap:9px; flex-wrap:wrap}
+.tag{
+  border:1px solid var(--line); border-radius:20px; padding:6px 14px;
+  font-size:12px; color:var(--fg2); background:var(--card);
+}
+.acoes{grid-area:acoes; align-self:end; display:flex; gap:10px; flex-wrap:wrap; padding:26px 34px 36px 0}
 .cta{
   background:var(--gb); color:var(--go); font-size:14px; font-weight:500;
   padding:13px 28px; border-radius:6px; text-decoration:none; display:inline-block;
@@ -120,8 +132,10 @@ footer a{color:var(--fg2)}
 
 @media (max-width:720px){
   header{padding:14px 18px}
+  .destaque{grid-template-columns:210px minmax(0,1fr); column-gap:24px}
   .cartaz{width:210px}
-  .corpo{padding:22px 20px}
+  .corpo{padding:26px 20px 0 0}
+  .acoes{padding:20px 20px 26px 0}
   .titulo{font-size:27px}
   .resumo{font-size:13.5px}
   section{padding:22px 20px}
@@ -134,22 +148,28 @@ footer a{color:var(--fg2)}
 @media (max-width:520px){
   header{padding:11px 14px}
   .marca{font-size:20px}
-  .destaque{padding:16px 14px; gap:12px; border-bottom:1px solid var(--line)}
-  .cartaz{width:38%; min-width:118px; max-width:150px; border-radius:4px}
-  .cartaz .c1{width:112px; height:112px; left:-34px; top:-28px}
-  .cartaz .c2{width:100%; height:34px; bottom:60px}
-  .cartaz .c3{width:44px; height:44px; right:-10px; bottom:82px}
-  .cartaz .txt{left:11px; right:11px; bottom:18px}
-  .cartaz .dia{font-size:26px}
-  .cartaz .loc{font-size:7px; letter-spacing:.14em; margin-top:4px}
+  .destaque{
+    grid-template-columns:140px minmax(0,1fr);
+    grid-template-areas:"cartaz corpo" "acoes acoes";
+    column-gap:13px;
+    padding:16px 14px;
+  }
+  .cartaz{width:140px; border-radius:4px}
+  .cartaz .c1{width:120px; height:120px; left:-36px; top:-30px}
+  .cartaz .c2{width:100%; height:36px; bottom:64px}
+  .cartaz .c3{width:46px; height:46px; right:-11px; bottom:88px}
+  .cartaz .txt{left:11px; right:11px; bottom:19px}
+  .cartaz .dia{font-size:27px}
+  .cartaz .loc{font-size:7px; letter-spacing:.14em; margin-top:5px}
   .selo{font-size:7px; padding:3px 5px; top:6px; right:6px}
-  .corpo{padding:0}
+  .corpo{padding:0; align-self:center}
   .eyebrow{font-size:8px; margin-bottom:7px}
   .titulo{font-size:21px; margin-bottom:8px}
   .quando{font-size:8.5px; letter-spacing:.13em; margin-bottom:9px}
-  .resumo{font-size:11.5px; margin-bottom:12px}
-  .acoes{flex-direction:column; gap:6px}
-  .cta,.cta2{width:100%; text-align:center; padding:10px 8px; font-size:12px}
+  .resumo{font-size:11.5px; margin-bottom:0}
+  .meta{display:none}
+  .acoes{padding:14px 0 0; gap:8px; flex-wrap:nowrap}
+  .cta,.cta2{flex:1 1 0; min-width:0; text-align:center; padding:11px 6px; font-size:12px}
   section{padding:16px 14px}
   .frase{font-size:18px}
   .mini{width:50px; height:50px}
@@ -193,12 +213,16 @@ footer a{color:var(--fg2)}
   <div class="corpo">
     <div class="eyebrow">PRÓXIMO ENCONTRO</div>
     <h1 class="ser titulo">Primeiro encontro da confraria</h1>
-    <div class="quando">18 SET · 19H · CENTRO DO RIO</div>
-    <p class="resumo">Uma noite de conversa entre pares sobre o exercício da advocacia no Rio. Encontro gratuito.</p>
-    <div class="acoes">
-      <a class="cta" href="#">Quero participar</a>
-      <a class="cta2" href="#">Ver o vídeo</a>
+    <div class="quando">18 SET · CENTRO DO RIO</div>
+    <p class="resumo">Uma noite de conversa entre pares sobre o exercício da advocacia no Rio — carreira, honorários e os caminhos de quem está começando agora.</p>
+    <div class="meta">
+      <span class="tag">Gratuito</span>
+      <span class="tag">Das 19h às 22h</span>
     </div>
+  </div>
+  <div class="acoes">
+    <a class="cta" href="#">Quero participar</a>
+    <a class="cta2" href="#">Ver o vídeo</a>
   </div>
 </div>
 
