@@ -1,373 +1,638 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-tema="escuro">
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
-<title>ADV+ — maquete da página de eventos</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16202E">
+<title>Despachos TJRJ — Visitação</title>
 <style>
 :root{
-  --bg:#0B1626; --card:#111F35; --line:#22344F;
-  --fg:#DCE3EC; --fg2:#8497AF; --hd:#FFFFFF;
-  --gt:#C9A15A; --gb:#C9A15A; --go:#0B1626;
+  --ink:#0F2440; --ink-2:#3B5578; --ink-3:#71879F;
+  --paper:#EAF0F6; --card:#FFFFFF; --line:#D2DFEB;
+  --brand:#1E6A9E; --brand-soft:#E0EDF7;
+  --ok:#17705C; --ok-soft:#DEF0EA;
+  --pend:#96590A; --pend-soft:#FAEDD6;
+  --sched:#5B4AA8; --sched-soft:#E9E7F8;
+  --no:#8A3040; --no-soft:#F7E5E8;
+  --head-1:#0C2340; --head-2:#175A85;   /* marinho -> mar */
+  --head-fg:#FFFFFF; --field:#F5F9FC;
+  --r:12px;
+  --fs:15px;
+  color-scheme:light;
 }
-html[data-tema="claro"]{
-  --bg:#FBFAF7; --card:#FFFFFF; --line:#E1DBD0;
-  --fg:#1C2B40; --fg2:#5F6E80; --hd:#0B1626;
-  --gt:#8A6A2A; --gb:#C9A15A; --go:#0B1626;
+[data-tema="escuro"]{
+  --ink:#E7EFF8; --ink-2:#B4C7DC; --ink-3:#8298B1;
+  --paper:#081524; --card:#102338; --line:#22394F;
+  --brand:#6DB6E6; --brand-soft:#143349;
+  --ok:#63C8A8; --ok-soft:#0F3630;
+  --pend:#E0A651; --pend-soft:#3A2C13;
+  --sched:#A99BEA; --sched-soft:#25214A;
+  --no:#E28797; --no-soft:#3A1F26;
+  --head-1:#071426; --head-2:#0F3B5C;
+  --head-fg:#EAF3FB; --field:#0C1B2C;
+  color-scheme:dark;
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
 body{
-  margin:0; background:var(--bg); color:var(--fg);
-  font-family:'Inter',system-ui,sans-serif; font-size:15px; line-height:1.6;
-  -webkit-font-smoothing:antialiased;
+  background:var(--paper); color:var(--ink);
+  transition:background .25s, color .25s;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:var(--fs); line-height:1.45;
+  padding-bottom:env(safe-area-inset-bottom);
 }
-.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
-.ser{font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; color:var(--hd)}
-.wrap{max-width:960px; margin:0 auto}
-.aviso{
-  background:var(--gb); color:var(--go); text-align:center;
-  padding:8px 16px; font-size:12px; font-weight:500;
-}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--brand)}
 
+/* ---------- cabeçalho ---------- */
 header{
-  display:flex; align-items:center; gap:12px;
-  padding:16px 24px; border-bottom:1px solid var(--line);
+  position:sticky; top:0; z-index:30; color:var(--head-fg);
+  background:linear-gradient(135deg, var(--head-1) 0%, var(--head-1) 34%, var(--head-2) 100%);
+  padding:calc(10px + env(safe-area-inset-top)) 12px 10px;
+  box-shadow:0 2px 12px rgba(8,21,36,.3);
 }
-.marca{font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:26px; color:var(--hd)}
-.marca span{color:var(--gt)}
-.espaco{flex:1}
-.pill{
-  font-family:'Inter',sans-serif; font-size:13px;
-  border:1px solid var(--line); border-radius:22px;
-  padding:7px 15px; cursor:pointer;
-  display:inline-flex; align-items:center; gap:7px;
-}
-.entrar{font-size:13px; color:var(--fg2); text-decoration:none}
+.hrow{display:flex;align-items:center;gap:10px}
+.brand{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;opacity:.97}
+.brand small{display:block;letter-spacing:.02em;text-transform:none;font-weight:400;font-size:11.5px;opacity:.6}
+.hbtn{background:rgba(255,255,255,.14);border:0;color:var(--head-fg);border-radius:9px;padding:8px 11px;font-size:16px;line-height:1}
+.hbtn:active{background:rgba(255,255,255,.26)}
+.hbtn.tema{margin-left:auto;font-size:15px}
+.bars{display:flex;gap:6px;margin-top:10px}
+.stat{flex:1;background:rgba(255,255,255,.08);border-radius:9px;padding:6px 8px;text-align:center}
+.stat b{display:block;font-size:19px;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.65}
+.progress{height:4px;border-radius:3px;background:rgba(255,255,255,.15);margin-top:9px;overflow:hidden}
+.progress i{display:block;height:100%;background:#6FE0B4;width:0;transition:width .4s}
 
-.destaque{display:flex; border-bottom:1px solid var(--line)}
-.destaque{
-  display:grid;
-  grid-template-columns:300px minmax(0,1fr);
-  grid-template-areas:"cartaz corpo" "cartaz acoes";
-  column-gap:34px;
-  border-bottom:1px solid var(--line);
+/* ---------- filtros ---------- */
+.filters{background:var(--card);border-bottom:1px solid var(--line);padding:10px 12px;position:sticky;top:0;z-index:20}
+.search{position:relative}
+.search input{
+  width:100%;padding:11px 36px 11px 34px;border:1px solid var(--line);border-radius:10px;
+  background:var(--field);outline:none;
 }
-.cartaz{grid-area:cartaz; width:300px; aspect-ratio:4/5; position:relative; overflow:hidden; background:#EFE7D6}
-.cartaz .c1{position:absolute; width:230px; height:230px; border-radius:50%; background:#C9A15A; left:-70px; top:-56px}
-.cartaz .c2{position:absolute; width:300px; height:78px; background:#1C3454; left:0; bottom:118px}
-.cartaz .c3{position:absolute; width:92px; height:92px; border-radius:50%; background:#C4653F; right:-22px; bottom:160px}
-.cartaz .txt{position:absolute; left:24px; right:24px; bottom:44px}
-.cartaz .dia{font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:54px; line-height:.95; color:#12233B}
-.cartaz .loc{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.18em; color:#5A4A2E; margin-top:10px}
-.selo{
-  position:absolute; top:11px; right:11px;
-  background:rgba(18,35,59,.86); color:#EFE7D6;
-  font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.1em;
-  padding:5px 8px; border-radius:4px;
+.search input:focus{border-color:var(--brand);background:var(--card);box-shadow:0 0 0 3px var(--brand-soft)}
+.search .ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--ink-3);font-size:14px}
+.search .clr{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--ink-3);padding:6px 8px;font-size:16px;display:none}
+.chips{display:flex;gap:6px;overflow-x:auto;margin-top:9px;padding-bottom:2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink-2);
+  border-radius:999px;padding:6px 12px;font-size:13px;white-space:nowrap;
 }
-.corpo{grid-area:corpo; align-self:start; min-width:0; padding:36px 34px 0 0}
-.eyebrow{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; color:var(--fg2); margin-bottom:14px}
-.titulo{font-size:38px; line-height:1.08; margin:0 0 15px}
-.quando{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; color:var(--gt); margin-bottom:15px}
-.resumo{font-size:14.5px; color:var(--fg2); margin:0 0 20px; max-width:46ch}
-.meta{display:flex; gap:9px; flex-wrap:wrap}
-.tag{
-  border:1px solid var(--line); border-radius:20px; padding:6px 14px;
-  font-size:12px; color:var(--fg2); background:var(--card);
+.chip[aria-pressed="true"]{background:var(--head-2);border-color:var(--head-2);color:#fff;font-weight:600}
+.selects{display:flex;gap:6px;margin-top:8px}
+.selects select{
+  flex:1;min-width:0;padding:9px 8px;border:1px solid var(--line);border-radius:9px;background:var(--field);
+  font-size:13.5px;appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%2371809A'/></svg>");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:24px;
 }
-.acoes{grid-area:acoes; align-self:end; display:flex; gap:10px; flex-wrap:wrap; padding:26px 34px 36px 0}
-.cta{
-  background:var(--gb); color:var(--go); font-size:14px; font-weight:500;
-  padding:13px 28px; border-radius:6px; text-decoration:none; display:inline-block;
-}
-.cta2{
-  border:1px solid var(--line); color:var(--fg2); font-size:13.5px;
-  padding:13px 20px; border-radius:6px; text-decoration:none; display:inline-block;
-}
+.count{font-size:12px;color:var(--ink-3);margin-top:8px;display:flex;align-items:center;gap:8px}
+.count button{background:none;border:0;color:var(--brand);font-size:12px;text-decoration:underline;padding:0}
 
-section{padding:28px 34px; border-bottom:1px solid var(--line)}
-.linha{
-  display:flex; gap:16px; align-items:center;
-  background:var(--card); border:1px solid var(--line);
-  border-radius:8px; padding:13px 16px; margin-bottom:11px;
+/* ---------- lista ---------- */
+main{padding:10px 12px 90px}
+.groupname{
+  font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:700;margin:16px 2px 7px;display:flex;align-items:center;gap:8px
 }
-.mini{width:74px; height:74px; flex:none; border-radius:6px; position:relative; overflow:hidden}
-.mini i{position:absolute; display:block}
-.linha h3{font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:20px; line-height:1.2; color:var(--hd); margin:0}
-.linha .quando{margin:5px 0 0}
-.part{font-size:13px; color:var(--fg2); flex:none; text-decoration:none}
-.oculto{display:none}
-.centro{text-align:center; padding-top:6px}
+.groupname:first-child{margin-top:2px}
+.groupname i{flex:1;height:1px;background:var(--line);font-style:normal}
+.groupname em{font-style:normal;color:var(--ink-3);font-weight:500;letter-spacing:0;text-transform:none}
 
-.sobre{text-align:center}
-.risco{width:48px; height:1px; background:var(--gb); margin:0 auto 18px}
-.frase{font-size:22px; line-height:1.45; max-width:26ch; margin:0 auto 22px}
-.pilares{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:11px; text-align:left; margin-bottom:22px}
-.pilar{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:15px 16px}
-.pilar b{display:block; font-size:13.5px; font-weight:500; color:var(--fg); margin-bottom:5px}
-.pilar span{font-size:12.5px; color:var(--fg2); line-height:1.5}
+.card{
+  background:var(--card);border:1px solid var(--line);border-left:4px solid var(--line);
+  border-radius:var(--r);padding:11px 12px;margin-bottom:8px;position:relative;overflow:hidden;
+  display:block;width:100%;text-align:left;cursor:pointer;
+}
+.card:active{transform:scale(.994)}
+.card.s-visitado{border-left-color:var(--ok)}
+.card.s-agendado{border-left-color:var(--sched)}
+.card.s-nao{border-left-color:var(--no);opacity:.78}
+.card.s-visitar{border-left-color:var(--pend)}
+.nome{font-weight:650;font-size:15.5px;line-height:1.25;padding-right:8px}
+.sub{font-size:12.5px;color:var(--ink-3);margin-top:3px}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.tag{font-size:11px;padding:3px 8px;border-radius:6px;background:var(--field);color:var(--ink-2);border:1px solid var(--line);font-weight:600;letter-spacing:.02em}
+.tag.b{background:var(--brand-soft);border-color:var(--line);color:var(--brand)}
+.tag.ok{background:var(--ok-soft);border-color:var(--line);color:var(--ok)}
+.tag.pd{background:var(--pend-soft);border-color:var(--line);color:var(--pend)}
+.tag.sc{background:var(--sched-soft);border-color:var(--line);color:var(--sched)}
+.tag.nk{background:var(--no-soft);border-color:var(--line);color:var(--no)}
+.tag.ghost{background:transparent;border-style:dashed;color:var(--ink-3);font-weight:500}
+.note{font-size:12.5px;color:var(--ink-2);margin-top:8px;background:var(--field);border-radius:8px;padding:7px 9px;border:1px solid var(--line)}
+.note b{color:var(--ink);font-weight:650}
+.stamp{
+  position:absolute;right:-6px;top:12px;transform:rotate(-9deg);
+  border:2px solid var(--ok);color:var(--ok);border-radius:5px;
+  font-size:10px;font-weight:800;letter-spacing:.14em;padding:2px 8px;opacity:.55;pointer-events:none
+}
+.empty{text-align:center;color:var(--ink-3);padding:48px 20px;font-size:14px}
+.empty b{display:block;color:var(--ink-2);font-size:16px;margin-bottom:6px}
 
-.redes{display:flex; align-items:center; gap:18px; flex-wrap:wrap}
-.redes .txt{flex:1; min-width:200px}
-.redes b{display:block; font-size:14px; font-weight:500; margin-bottom:4px}
-.redes p{margin:0; font-size:13px; color:var(--fg2)}
-.rede{
-  border:1px solid var(--line); border-radius:6px; padding:10px 15px;
-  font-size:13px; color:var(--fg); text-decoration:none;
-  display:inline-flex; align-items:center; gap:8px;
+/* ---------- ficha ---------- */
+.sheet{position:fixed;inset:0;z-index:60;display:none}
+.sheet.open{display:block}
+.backdrop{position:absolute;inset:0;background:rgba(6,17,30,.62)}
+.panel{
+  position:absolute;left:0;right:0;bottom:0;top:0;background:var(--paper);
+  display:flex;flex-direction:column;animation:up .22s ease-out
 }
-.rede.so{width:42px; height:42px; padding:0; justify-content:center}
-.ic{width:18px; height:18px; display:block}
+@keyframes up{from{transform:translateY(14px);opacity:.4}to{transform:none;opacity:1}}
+.phead{background:linear-gradient(135deg, var(--head-1) 0%, var(--head-2) 100%);color:var(--head-fg);padding:calc(12px + env(safe-area-inset-top)) 14px 12px;display:flex;gap:10px;align-items:flex-start}
+.phead h2{margin:0;font-size:17px;line-height:1.25;font-weight:650}
+.phead p{margin:4px 0 0;font-size:12.5px;opacity:.7}
+.close{margin-left:auto;background:rgba(255,255,255,.16);border:0;color:var(--head-fg);border-radius:9px;padding:7px 11px;font-size:16px;line-height:1;flex:0 0 auto}
+.pbody{flex:1;overflow-y:auto;padding:12px 14px 24px;-webkit-overflow-scrolling:touch}
+.block{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-bottom:10px}
+.block h3{margin:0 0 9px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.orig{font-size:13.5px;color:var(--ink-2);margin:0 0 8px;padding-left:10px;border-left:2px solid var(--line)}
+.orig b{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:2px}
+.orig:last-child{margin-bottom:0}
+label{display:block;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);font-weight:700;margin:10px 0 5px}
+label:first-of-type{margin-top:0}
+input[type=text],input[type=date],input[type=tel],input[type=email],textarea,.block select{
+  width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--field);color:var(--ink);outline:none
+}
+input:focus,textarea:focus,.block select:focus{border-color:var(--brand);background:var(--card);box-shadow:0 0 0 3px var(--brand-soft)}
+textarea{min-height:84px;resize:vertical}
+.seg{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.seg button{
+  border:1px solid var(--line);background:var(--card);border-radius:9px;padding:10px 6px;font-size:13px;font-weight:600;color:var(--ink-2)
+}
+.seg button[aria-pressed="true"]{color:#fff;border-color:transparent}
+.seg button[data-v="Visitado"][aria-pressed="true"]{background:var(--ok)}
+.seg button[data-v="A visitar"][aria-pressed="true"]{background:var(--pend)}
+.seg button[data-v="Agendado"][aria-pressed="true"]{background:var(--sched)}
+.seg button[data-v="Não recebe"][aria-pressed="true"]{background:var(--no)}
+.seg3{grid-template-columns:repeat(2,1fr)}
+.seg3 button[aria-pressed="true"]{background:var(--head-2)}
+.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.links a{
+  font-size:12.5px;text-decoration:none;background:var(--brand-soft);color:var(--brand);
+  border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-weight:600
+}
+.pfoot{border-top:1px solid var(--line);background:var(--card);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px}
+.btn{flex:1;border:0;border-radius:10px;padding:13px;font-weight:700;font-size:15px}
+.btn.primary{background:var(--head-2);color:#fff}
+.btn.ghost{flex:0 0 auto;background:var(--card);border:1px solid var(--line);color:var(--ink-2);padding:13px 16px}
 
-footer{
-  padding:18px 34px; display:flex; gap:16px; flex-wrap:wrap; align-items:center;
-  font-size:12px; color:var(--fg2);
-}
-footer a{color:var(--fg2)}
-.selo-mono{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em}
+/* ---------- menu ---------- */
+.menu{position:fixed;inset:0;z-index:70;display:none}
+.menu.open{display:block}
+.mcard{position:absolute;right:10px;top:calc(56px + env(safe-area-inset-top));background:var(--card);border:1px solid var(--line);border-radius:var(--r);width:min(300px,calc(100% - 20px));box-shadow:0 14px 34px rgba(6,17,30,.4);overflow:hidden}
+.mcard button{display:block;width:100%;text-align:left;background:none;border:0;padding:13px 14px;border-bottom:1px solid var(--line);font-size:14.5px}
+.mcard button:last-child{border-bottom:0}
+.mcard .warn{color:var(--no)}
+.mnote{padding:11px 14px;font-size:12px;color:var(--ink-3);background:var(--field);border-bottom:1px solid var(--line)}
 
-@media (max-width:720px){
-  header{padding:14px 18px}
-  .destaque{grid-template-columns:210px minmax(0,1fr); column-gap:24px}
-  .cartaz{width:210px}
-  .corpo{padding:26px 20px 0 0}
-  .acoes{padding:20px 20px 26px 0}
-  .titulo{font-size:27px}
-  .resumo{font-size:13.5px}
-  section{padding:22px 20px}
-  .pilares{grid-template-columns:1fr}
-  footer{padding:16px 20px}
-  .linha{gap:12px; padding:11px 12px}
-  .mini{width:58px; height:58px}
-  .linha h3{font-size:17px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--head-1);color:#fff;border:1px solid var(--head-2);padding:11px 18px;border-radius:10px;font-size:13.5px;font-weight:600;opacity:0;transition:.22s;z-index:90;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(min-width:720px){
+  body{max-width:760px;margin:0 auto;background:var(--paper)}
+  .panel{max-width:760px;margin:0 auto}
+  .seg,.seg3{grid-template-columns:repeat(4,1fr)}
 }
-@media (max-width:520px){
-  header{padding:11px 14px}
-  .marca{font-size:20px}
-  .destaque{
-    grid-template-columns:140px minmax(0,1fr);
-    grid-template-areas:"cartaz corpo" "acoes acoes";
-    column-gap:13px;
-    padding:16px 14px;
-  }
-  .cartaz{width:140px; border-radius:4px}
-  .cartaz .c1{width:120px; height:120px; left:-36px; top:-30px}
-  .cartaz .c2{width:100%; height:36px; bottom:64px}
-  .cartaz .c3{width:46px; height:46px; right:-11px; bottom:88px}
-  .cartaz .txt{left:11px; right:11px; bottom:19px}
-  .cartaz .dia{font-size:27px}
-  .cartaz .loc{font-size:7px; letter-spacing:.14em; margin-top:5px}
-  .selo{font-size:7px; padding:3px 5px; top:6px; right:6px}
-  .corpo{padding:0; align-self:center}
-  .eyebrow{font-size:8px; margin-bottom:7px}
-  .titulo{font-size:21px; margin-bottom:8px}
-  .quando{font-size:8.5px; letter-spacing:.13em; margin-bottom:9px}
-  .resumo{font-size:11.5px; margin-bottom:0}
-  .meta{display:none}
-  .acoes{padding:14px 0 0; gap:8px; flex-wrap:nowrap}
-  .cta,.cta2{flex:1 1 0; min-width:0; text-align:center; padding:11px 6px; font-size:12px}
-  section{padding:16px 14px}
-  .frase{font-size:18px}
-  .mini{width:50px; height:50px}
-  .linha{gap:11px; padding:10px 11px}
-  .linha h3{font-size:15.5px}
-  footer{padding:14px}
-}
-:focus-visible{outline:2px solid var(--gt); outline-offset:2px}
 </style>
+<script>
+(function(){
+  var t;
+  try{ t = localStorage.getItem('tjrj_tema'); }catch(e){}
+  if(!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro';
+  document.documentElement.setAttribute('data-tema', t);
+})();
+</script>
 </head>
 <body>
 
-<div class="aviso">Maquete para aprovação — eventos, textos e imagens são ilustrativos</div>
-
-<div class="wrap">
-
 <header>
-  <span class="marca">ADV<span>+</span></span>
-  <span class="espaco"></span>
-  <button class="pill" id="btnTema" type="button"
-          style="color:var(--fg); background:var(--card); border-color:var(--line)"
-          aria-label="Alternar entre modo claro e escuro">
-    <svg class="ic" id="icTema" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="4"></circle>
-      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
-    </svg>
-    <span id="txtTema">Modo claro</span>
-  </button>
-  <a class="entrar" href="#">Entrar</a>
+  <div class="hrow">
+    <div class="brand">Despachos TJRJ<small>Roteiro de visitação aos gabinetes</small></div>
+    <button class="hbtn tema" id="temaBtn" aria-label="Alternar tema claro e escuro">◐</button>
+    <button class="hbtn" id="menuBtn" aria-label="Menu">⋮</button>
+  </div>
+  <div class="bars">
+    <div class="stat"><b id="stVis">0</b><span>Visitados</span></div>
+    <div class="stat"><b id="stAge">0</b><span>Agendados</span></div>
+    <div class="stat"><b id="stFal">0</b><span>Faltam</span></div>
+    <div class="stat"><b id="stTot">0</b><span>Na lista</span></div>
+  </div>
+  <div class="progress"><i id="prog"></i></div>
 </header>
 
-<div class="destaque">
-  <div class="cartaz">
-    <div class="c1"></div><div class="c2"></div><div class="c3"></div>
-    <div class="txt">
-      <div class="dia">18 SET</div>
-      <div class="loc">CONFRARIA ADV+ · RIO</div>
-    </div>
-    <div class="selo">IMAGEM PROVISÓRIA</div>
+<div class="filters">
+  <div class="search">
+    <span class="ico">⌕</span>
+    <input id="q" type="text" inputmode="search" placeholder="Buscar desembargador, câmara, e-mail…" autocomplete="off">
+    <button class="clr" id="clrQ" aria-label="Limpar busca">✕</button>
   </div>
-  <div class="corpo">
-    <div class="eyebrow">PRÓXIMO ENCONTRO</div>
-    <h1 class="ser titulo">Primeiro encontro da confraria</h1>
-    <div class="quando">18 SET · CENTRO DO RIO</div>
-    <p class="resumo">Uma noite de conversa entre pares sobre o exercício da advocacia no Rio — carreira, honorários e os caminhos de quem está começando agora.</p>
-    <div class="meta">
-      <span class="tag">Gratuito</span>
-      <span class="tag">Das 19h às 22h</span>
-    </div>
+  <div class="chips" id="chipsStatus">
+    <button class="chip" data-st="" aria-pressed="true">Todos</button>
+    <button class="chip" data-st="A visitar" aria-pressed="false">A visitar</button>
+    <button class="chip" data-st="Agendado" aria-pressed="false">Agendados</button>
+    <button class="chip" data-st="Visitado" aria-pressed="false">Visitados</button>
+    <button class="chip" data-st="Não recebe" aria-pressed="false">Não recebe</button>
+    <button class="chip" data-st="__seminfo" aria-pressed="false">Sem informação</button>
   </div>
-  <div class="acoes">
-    <a class="cta" href="#">Quero participar</a>
-    <a class="cta2" href="#">Ver o vídeo</a>
+  <div class="selects">
+    <select id="fSecao"></select>
+    <select id="fCamara"></select>
+    <select id="fCanal"></select>
+  </div>
+  <div class="count"><span id="resumo"></span><button id="limpar" hidden>Limpar filtros</button></div>
+</div>
+
+<main id="lista"></main>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="backdrop" data-close></div>
+  <div class="panel">
+    <div class="phead">
+      <div>
+        <h2 id="fNome"></h2>
+        <p id="fCargo"></p>
+      </div>
+      <button class="close" data-close aria-label="Fechar">✕</button>
+    </div>
+    <div class="pbody" id="fBody"></div>
+    <div class="pfoot">
+      <button class="btn ghost" data-close>Cancelar</button>
+      <button class="btn primary" id="salvar">Salvar</button>
+    </div>
   </div>
 </div>
 
-<section>
-  <div class="eyebrow">TAMBÉM NA AGENDA</div>
-
-  <div class="linha">
-    <div class="mini" style="background:#DCE8DE">
-      <i style="width:62px;height:62px;border-radius:50%;background:#6E9B7A;left:-16px;top:-14px"></i>
-      <i style="width:28px;height:28px;background:#2E4A38;right:9px;bottom:10px"></i>
-    </div>
-    <div style="flex:1;min-width:0">
-      <h3>Mesa sobre honorários</h3>
-      <div class="quando">02 OUT · ON-LINE</div>
-    </div>
-    <a class="part" href="#">Participar</a>
+<div class="menu" id="menu">
+  <div class="backdrop" data-mclose></div>
+  <div class="mcard">
+    <div class="mnote" id="mnote"></div>
+    <button id="mExport">Baixar backup (.json)</button>
+    <button id="mExportCsv">Exportar planilha (.csv)</button>
+    <button id="mImport">Restaurar backup</button>
+    <button id="mReset" class="warn">Apagar tudo que preenchi</button>
   </div>
-
-  <div class="linha">
-    <div class="mini" style="background:#E3E7F2">
-      <i style="width:74px;height:27px;background:#4F6FA8;left:0;top:16px"></i>
-      <i style="width:36px;height:36px;border-radius:50%;background:#1C3454;right:-9px;bottom:-9px"></i>
-    </div>
-    <div style="flex:1;min-width:0">
-      <h3>Encontro de recém-formados</h3>
-      <div class="quando">21 OUT · BOTAFOGO</div>
-    </div>
-    <a class="part" href="#">Participar</a>
-  </div>
-
-  <div id="mais" class="oculto">
-    <div class="linha">
-      <div class="mini" style="background:#F5E2D8">
-        <i style="width:50px;height:50px;border-radius:50%;background:#C4653F;right:-12px;top:-12px"></i>
-        <i style="width:74px;height:20px;background:#7A3D24;left:0;bottom:13px"></i>
-      </div>
-      <div style="flex:1;min-width:0">
-        <h3>Oficina de petição inicial</h3>
-        <div class="quando">08 NOV · TIJUCA</div>
-      </div>
-      <a class="part" href="#">Participar</a>
-    </div>
-    <div class="linha">
-      <div class="mini" style="background:#F0E6CE">
-        <i style="width:56px;height:56px;background:#C9A15A;left:-12px;bottom:-14px"></i>
-        <i style="width:24px;height:24px;border-radius:50%;background:#5A4A2E;right:11px;top:11px"></i>
-      </div>
-      <div style="flex:1;min-width:0">
-        <h3>Confraternização de fim de ano</h3>
-        <div class="quando">12 DEZ · LEBLON</div>
-      </div>
-      <a class="part" href="#">Participar</a>
-    </div>
-  </div>
-
-  <div class="centro">
-    <button class="pill" id="btnMais" type="button"
-            style="color:var(--fg); background:var(--card); border-color:var(--line)">
-      <span id="txtMais">Ver mais</span>
-      <svg class="ic" id="icMais" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M6 9l6 6 6-6"></path>
-      </svg>
-    </button>
-  </div>
-</section>
-
-<section class="sobre">
-  <div class="risco"></div>
-  <p class="ser frase">Uma confraria de profissionais do Direito no Rio de Janeiro.</p>
-  <div class="pilares">
-    <div class="pilar"><b>Encontros</b><span>Reuniões e formação entre membros.</span></div>
-    <div class="pilar"><b>Diretório</b><span>Quem é quem, só para quem faz parte.</span></div>
-    <div class="pilar"><b>Parceria</b><span>Indicação e apoio entre pares.</span></div>
-  </div>
-  <a class="cta2" href="#">Solicitar cadastro</a>
-</section>
-
-<section class="redes">
-  <div class="txt">
-    <b>Veja como foram os encontros anteriores</b>
-    <p>Vídeos, fotos e bastidores no nosso Instagram.</p>
-  </div>
-  <div style="display:flex;gap:9px">
-    <a class="rede" href="#">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="var(--gt)" stroke-width="1.7" aria-hidden="true">
-        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
-        <circle cx="12" cy="12" r="4"></circle>
-        <circle cx="17.5" cy="6.5" r="1.1" fill="var(--gt)" stroke="none"></circle>
-      </svg>
-      @advmaisrj
-    </a>
-    <a class="rede so" href="#" aria-label="Facebook">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
-        <path d="M14 8h2.5V5H14c-2 0-3.2 1.2-3.2 3.2V11H8.5v3h2.3v6h3v-6H16l.5-3h-2.7V8.6c0-.4.2-.6.7-.6z"></path>
-      </svg>
-    </a>
-    <a class="rede so" href="#" aria-label="YouTube">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
-        <rect x="2.5" y="6" width="19" height="12" rx="3.5"></rect>
-        <path d="M10.5 9.5l4.5 2.5-4.5 2.5z"></path>
-      </svg>
-    </a>
-  </div>
-</section>
-
-<footer>
-  <span class="selo-mono">CRESCIMENTO · NETWORKING · CONFRARIA</span>
-  <span class="espaco"></span>
-  <a href="#">Política de Privacidade</a>
-</footer>
-
 </div>
+<input type="file" id="fileIn" accept=".json,application/json" hidden>
+<div class="toast" id="toast"></div>
 
 <script>
-(function () {
-  var raiz = document.documentElement;
-  var btn  = document.getElementById('btnTema');
-  var txt  = document.getElementById('txtTema');
-  var ic   = document.getElementById('icTema');
+const DADOS = [{"id":"d000","nome":"Adolpho Correa De Andrade Mello Junior","cargo":"Desembargador(a)","camara":"14ª Câmara de Direito Privado","camaraNum":14,"secao":"Privado","anterior":"Nona Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d001","nome":"Adriana Ramos De Mello","cargo":"Desembargador(a)","camara":"6ª Câmara Criminal","camaraNum":6,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d002","nome":"Adriano Celso Guimaraes","cargo":"Desembargador(a)","camara":"1ª Câmara de Direito Privado","camaraNum":1,"secao":"Privado","anterior":"Oitava Camara Civel","orgaoEspecial":true,"presidenteCamara":true,"presencial":"Quarta, Quinta e sexta às 13h","video":"Não despacha online","canal":"Presencial","emails":[],"tels":[]},{"id":"d003","nome":"Agostinho Teixeira De Almeida Filho","cargo":"Desembargador(a)","camara":"7ª Câmara de Direito Privado","camaraNum":7,"secao":"Privado","anterior":"Décima Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d004","nome":"Alcides Da Fonseca Neto","cargo":"Desembargador(a)","camara":"7ª Câmara de Direito Privado","camaraNum":7,"secao":"Privado","anterior":"Décima Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"online pelo sistema","canal":"Vídeo","emails":[],"tels":[]},{"id":"d005","nome":"Alessandro Oliveira Felix","cargo":"Desembargador(a)","camara":"5ª Câmara de Direito Privado","camaraNum":5,"secao":"Privado","anterior":"Vigésima Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d006","nome":"Alexandre Eduardo Scisinio","cargo":"Desembargador(a)","camara":"15ª Câmara de Direito Privado","camaraNum":15,"secao":"Privado","anterior":"Vigésima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Seg. 11 horas - fazer pré agendamento por telefone antes","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d007","nome":"Alexandre Freitas Camara","cargo":"Desembargador(a)","camara":"9ª Câmara de Direito Privado","camaraNum":9,"secao":"Privado","anterior":"Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"Presencial horário de chegada (ligar antes)","canal":"Vídeo","emails":[],"tels":[]},{"id":"d008","nome":"Alexandre Teixeira De Souza","cargo":"Desembargador(a)","camara":"5ª Câmara de Direito Público","camaraNum":5,"secao":"Público","anterior":"Décima Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d009","nome":"Alvaro Henrique Teixeira De Almeida","cargo":"Desembargador(a)","camara":"14ª Câmara de Direito Privado","camaraNum":14,"secao":"Privado","anterior":"Nona Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d010","nome":"Ana Cristina Nascif Dib Miguel","cargo":"Desembargador(a)","camara":"2ª Câmara de Direito Público","camaraNum":2,"secao":"Público","anterior":"Décima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d011","nome":"Ana Maria Pereira De Oliveira","cargo":"Desembargador(a)","camara":"17ª Câmara de Direito Privado","camaraNum":17,"secao":"Privado","anterior":"Vigésima Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"","video":"pelo sistema do TJRJ","canal":"Vídeo","emails":[],"tels":[]},{"id":"d012","nome":"Andre Emilio Ribeiro Von Melentovytch","cargo":"Desembargador(a)","camara":"6ª Câmara de Direito Público","camaraNum":6,"secao":"Público","anterior":"Vigésima Primeira Camara Civel","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d013","nome":"Andre Gustavo Correa De Andrade","cargo":"Desembargador(a)","camara":"4ª Câmara de Direito Público","camaraNum":4,"secao":"Público","anterior":"Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d014","nome":"André Luís Mançano Marques","cargo":"Desembargador(a)","camara":"19ª Câmara de Direito Privado","camaraNum":19,"secao":"Privado","anterior":"Vigésima Quinta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d015","nome":"Andre Luiz Cidra","cargo":"Desembargador(a)","camara":"20ª Câmara de Direito Privado","camaraNum":20,"secao":"Privado","anterior":"Décima Primeira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d016","nome":"Andre Ricardo De Franciscis Ramos","cargo":"Desembargador(a)","camara":"5ª Câmara Criminal","camaraNum":5,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d017","nome":"Andrea Maciel Pacha","cargo":"Desembargador(a)","camara":"8ª Câmara de Direito Privado","camaraNum":8,"secao":"Privado","anterior":"Décima Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Todos os dias por ordem de chegada (ligar antes para conferir)","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d018","nome":"Antonio Carlos Arrabida Paes","cargo":"Desembargador(a)","camara":"10ª Câmara de Direito Privado","camaraNum":10,"secao":"Privado","anterior":"Primeira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d019","nome":"Antonio Iloizio Barros Bastos","cargo":"Desembargador(a)","camara":"16ª Câmara de Direito Privado","camaraNum":16,"secao":"Privado","anterior":"Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d020","nome":"Antonio Marreiros Da Silva Melo Neto","cargo":"Desembargador(a)","camara":"7ª Câmara de Direito Privado","camaraNum":7,"secao":"Privado","anterior":"Décima Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"mandar e-mail","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d021","nome":"Arthur Narciso De Oliveira Neto","cargo":"Desembargador(a)","camara":"17ª Câmara de Direito Privado","camaraNum":17,"secao":"Privado","anterior":"Vigésima Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"ordem de chegada (ligar antes)","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d022","nome":"Augusto Alves Moreira Junior","cargo":"Desembargador(a)","camara":"1ª Câmara de Direito Privado","camaraNum":1,"secao":"Privado","anterior":"Oitava Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Todos os dias com a assessoria | agendamento com o desembargador somente com processo em pauta. | E-MAIL: gab.desaugustoamj@tjrj.jus.br","video":"","canal":"Presencial","emails":["gab.desaugustoamj@tjrj.jus.br"],"tels":[]},{"id":"d023","nome":"Benedicto Abicair","cargo":"Desembargador(a)","camara":"13ª Câmara de Direito Privado","camaraNum":13,"secao":"Privado","anterior":"Vigésima Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d024","nome":"Caetano Ernesto Da Fonseca Costa","cargo":"Desembargador(a)","camara":"4ª Câmara de Direito Público","camaraNum":4,"secao":"Público","anterior":"Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d025","nome":"Cairo Italo França David","cargo":"Desembargador(a)","camara":"5ª Câmara Criminal","camaraNum":5,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d026","nome":"Camilo Ribeiro Ruliere","cargo":"Desembargador(a)","camara":"10ª Câmara de Direito Privado","camaraNum":10,"secao":"Privado","anterior":"Primeira Camara Civel","orgaoEspecial":true,"presidenteCamara":true,"presencial":"todos os dias no período da tarde (ligar antes para conferir)","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d027","nome":"Carlos Alberto Machado","cargo":"Desembargador(a)","camara":"9ª Câmara de Direito Público","camaraNum":9,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d028","nome":"Carlos Alberto Menezes Direito Filho","cargo":"Desembargador(a)","camara":"5ª Câmara de Direito Público","camaraNum":5,"secao":"Público","anterior":"Décima Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d029","nome":"Carlos Eduardo Da Rosa Da Fonseca Passos","cargo":"Desembargador(a)","camara":"3ª Câmara de Direito Privado","camaraNum":3,"secao":"Privado","anterior":"Décima Oitava Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d030","nome":"Carlos Eduardo Freire Roboredo","cargo":"Desembargador(a)","camara":"3ª Câmara Criminal","camaraNum":3,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d031","nome":"Carlos Eduardo Moreira Da Silva","cargo":"Desembargador(a)","camara":"3ª Câmara de Direito Público","camaraNum":3,"secao":"Público","anterior":"Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d032","nome":"Carlos Gustavo Vianna Direito","cargo":"Desembargador(a)","camara":"16ª Câmara de Direito Privado","camaraNum":16,"secao":"Privado","anterior":"Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d033","nome":"Carlos Santos De Oliveira","cargo":"Desembargador(a)","camara":"2ª Câmara de Direito Privado","camaraNum":2,"secao":"Privado","anterior":"Terceira Camara Civel","orgaoEspecial":true,"presidenteCamara":false,"presencial":"Agendamento por e-mail: gab.descsoliveira@tjrj.jus.br","video":"Não despacha online","canal":"Presencial","emails":["gab.descsoliveira@tjrj.jus.br"],"tels":[]},{"id":"d034","nome":"Celso Luiz De Matos Peres","cargo":"Desembargador(a)","camara":"2ª Câmara de Direito Público","camaraNum":2,"secao":"Público","anterior":"Décima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d035","nome":"Celso Silva Filho","cargo":"Desembargador(a)","camara":"22ª Câmara de Direito Privado","camaraNum":22,"secao":"Privado","anterior":"Vigésima Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d036","nome":"Cesar Felipe Cury","cargo":"Desembargador(a)","camara":"20ª Câmara de Direito Privado","camaraNum":20,"secao":"Privado","anterior":"Décima Primeira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d037","nome":"Cezar Augusto Rodrigues Costa","cargo":"Desembargador(a)","camara":"3ª Câmara Criminal","camaraNum":3,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d038","nome":"Cherubin Helcias Schwartz Junior","cargo":"Desembargador(a)","camara":"1ª Câmara de Direito Privado","camaraNum":1,"secao":"Privado","anterior":"Oitava Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Segunda, quarta e sexta por ordem de chegada.","video":"e-mail: gab.descherubinhsj@tjrj.jus.br","canal":"Ambos","emails":["gab.descherubinhsj@tjrj.jus.br"],"tels":[]},{"id":"d039","nome":"Cintia Santarem Cardinali","cargo":"Desembargador(a)","camara":"5ª Câmara de Direito Privado","camaraNum":5,"secao":"Privado","anterior":"Vigésima Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"Mandar e-mail.","canal":"Vídeo","emails":[],"tels":[]},{"id":"d040","nome":"Claudia Maria De Oliveira Motta","cargo":"Desembargador(a)","camara":"5ª Câmara de Direito Privado","camaraNum":5,"secao":"Privado","anterior":"Vigésima Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Terça por horário de chegada","video":"Agendamento pelo site","canal":"Ambos","emails":[],"tels":[]},{"id":"d041","nome":"Claudia Nascimento Vieira","cargo":"Desembargador(a)","camara":"10ª Câmara de Direito Público","camaraNum":10,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d042","nome":"Claudia Pires Dos Santos Ferreira","cargo":"Desembargador(a)","camara":"3ª Câmara de Direito Público","camaraNum":3,"secao":"Público","anterior":"Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d043","nome":"Claudia Telles De Menezes","cargo":"Desembargador(a)","camara":"4ª Câmara de Direito Privado","camaraNum":4,"secao":"Privado","anterior":"Quinta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"mandar e-mail para agendamento - apenas por telefone","canal":"Vídeo","emails":[],"tels":[]},{"id":"d044","nome":"Claudio Brandao De Oliveira","cargo":"Corregedor","camara":"Corregedor","camaraNum":null,"secao":"Cúpula","anterior":"","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d045","nome":"Claudio De Mello Tavares","cargo":"Desembargador(a)","camara":"18ª Câmara de Direito Privado","camaraNum":18,"secao":"Privado","anterior":"Décima Quinta Camara Civel","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d046","nome":"Claudio Luis Braga Dell Orto","cargo":"Desembargador(a)","camara":"9ª Câmara de Direito Público","camaraNum":9,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d047","nome":"Cleber Ghelfenstein","cargo":"Desembargador(a)","camara":"12ª Câmara de Direito Privado","camaraNum":12,"secao":"Privado","anterior":"Décima Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d048","nome":"Cristina Serra Feijo","cargo":"Desembargador(a)","camara":"22ª Câmara de Direito Privado","camaraNum":22,"secao":"Privado","anterior":"Vigésima Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d049","nome":"Cristina Tereza Gaulia","cargo":"Desembargador(a)","camara":"4ª Câmara de Direito Privado","camaraNum":4,"secao":"Privado","anterior":"Quinta Camara Civel","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"Mandar email para agendamento","canal":"Vídeo","emails":[],"tels":[]},{"id":"d050","nome":"Custodio De Barros Tostes","cargo":"Desembargador(a)","camara":"10ª Câmara de Direito Privado","camaraNum":10,"secao":"Privado","anterior":"Primeira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d051","nome":"Daniela Brandão Ferreira","cargo":"Desembargador(a)","camara":"14ª Câmara de Direito Privado","camaraNum":14,"secao":"Privado","anterior":"Nona Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d052","nome":"Debora Maria Barbosa Sarmento","cargo":"Desembargador(a)","camara":"11ª Câmara de Direito Privado","camaraNum":11,"secao":"Privado","anterior":"Vigésima Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d053","nome":"Denise Nicoll Simões","cargo":"Desembargador(a)","camara":"4ª Câmara de Direito Privado","camaraNum":4,"secao":"Privado","anterior":"Quinta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Segunda, terça e quinta após as 14h","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d054","nome":"Denise Vaccari Machado Paes","cargo":"Desembargador(a)","camara":"1ª Câmara Criminal","camaraNum":1,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d055","nome":"Eduardo Abreu Biondi","cargo":"Desembargador(a)","camara":"15ª Câmara de Direito Privado","camaraNum":15,"secao":"Privado","anterior":"Vigésima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"agendar pelo e-mail do assessor refael.sampaio@tjrj.jus.br","canal":"Vídeo","emails":["refael.sampaio@tjrj.jus.br"],"tels":[]},{"id":"d056","nome":"Eduardo Antonio Klausner","cargo":"Desembargador(a)","camara":"2ª Câmara de Direito Público","camaraNum":2,"secao":"Público","anterior":"Décima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d057","nome":"Eduardo De Azevedo Paiva","cargo":"Desembargador(a)","camara":"3ª Câmara de Direito Privado","camaraNum":3,"secao":"Privado","anterior":"Décima Oitava Camara Civel","orgaoEspecial":true,"presidenteCamara":false,"presencial":"Segunda a quarta horário de chegada (ligar antes)","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d058","nome":"Eduardo Gusmao Alves De Brito Neto","cargo":"Desembargador(a)","camara":"8ª Câmara de Direito Público","camaraNum":8,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d059","nome":"Elton Martinez Carvalho Leme","cargo":"Desembargador(a)","camara":"8ª Câmara de Direito Privado","camaraNum":8,"secao":"Privado","anterior":"Décima Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d060","nome":"Fabio Dutra","cargo":"Desembargador(a)","camara":"10ª Câmara de Direito Privado","camaraNum":10,"secao":"Privado","anterior":"Primeira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d061","nome":"Fabio Uchoa Pinto De Miranda Montenegro","cargo":"Desembargador(a)","camara":"21ª Câmara de Direito Privado","camaraNum":21,"secao":"Privado","anterior":"Décima Nona Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d062","nome":"Fernanda Fernandes Coelho Arrabida Paes","cargo":"Desembargador(a)","camara":"9ª Câmara de Direito Privado","camaraNum":9,"secao":"Privado","anterior":"Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d063","nome":"Fernanda Xavier De Brito","cargo":"Desembargador(a)","camara":"3ª Câmara de Direito Privado","camaraNum":3,"secao":"Privado","anterior":"Décima Oitava Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"online no sistema","canal":"Vídeo","emails":[],"tels":[]},{"id":"d064","nome":"Fernando Cerqueira Chagas","cargo":"Desembargador(a)","camara":"20ª Câmara de Direito Privado","camaraNum":20,"secao":"Privado","anterior":"Décima Primeira Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d065","nome":"Fernando Cesar Ferreira Viana","cargo":"Desembargador(a)","camara":"7ª Câmara de Direito Público","camaraNum":7,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d066","nome":"Fernando Marques De Campos Cabral Filho","cargo":"Desembargador(a)","camara":"1ª Câmara de Direito Público","camaraNum":1,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d067","nome":"Flavia Romano De Rezende","cargo":"Desembargador(a)","camara":"8ª Câmara de Direito Público","camaraNum":8,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d068","nome":"Flávio Itabaiana De Oliveira Nicolau","cargo":"Desembargador(a)","camara":"2ª Câmara Criminal","camaraNum":2,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d069","nome":"Flávio Marcelo De Azevedo Horta Fernandes","cargo":"Desembargador(a)","camara":"2ª Câmara Criminal","camaraNum":2,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d070","nome":"Francisco De Assis Pessanha Filho","cargo":"Desembargador(a)","camara":"12ª Câmara de Direito Privado","camaraNum":12,"secao":"Privado","anterior":"Décima Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d071","nome":"Gabriel De Oliveira Zefiro","cargo":"Desembargador(a)","camara":"21ª Câmara de Direito Privado","camaraNum":21,"secao":"Privado","anterior":"Décima Nona Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"Todo dia por horario de chegada (ligar antes)","video":"marcar pelo site do TJ","canal":"Ambos","emails":[],"tels":[]},{"id":"d072","nome":"Georgia De Carvalho Lima","cargo":"Desembargador(a)","camara":"7ª Câmara de Direito Público","camaraNum":7,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d073","nome":"Geraldo Da Silva Batista Junior","cargo":"Desembargador(a)","camara":"5ª Câmara Criminal","camaraNum":5,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d074","nome":"Gilberto Clovis Farias Matos","cargo":"Desembargador(a)","camara":"13ª Câmara de Direito Privado","camaraNum":13,"secao":"Privado","anterior":"Vigésima Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d075","nome":"Gilmar Augusto Teixeira","cargo":"Desembargador(a)","camara":"8ª Câmara Criminal","camaraNum":8,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d076","nome":"Gizelda Leitao Teixeira","cargo":"Desembargador(a)","camara":"4ª Câmara Criminal","camaraNum":4,"secao":"Criminal","anterior":"","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d077","nome":"Guaraci De Campos Vianna","cargo":"Desembargador(a)","camara":"6ª Câmara de Direito Privado","camaraNum":6,"secao":"Privado","anterior":"Décima Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d078","nome":"Guilherme Braga Peña De Moraes","cargo":"Desembargador(a)","camara":"6ª Câmara de Direito Público","camaraNum":6,"secao":"Público","anterior":"Vigésima Primeira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d079","nome":"Guilherme Pedrosa Lopes","cargo":"Desembargador(a)","camara":"10ª Câmara de Direito Público","camaraNum":10,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d080","nome":"Helda Lima Meireles","cargo":"Desembargador(a)","camara":"2ª Câmara de Direito Privado","camaraNum":2,"secao":"Privado","anterior":"Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"Agendamento por e-mail: gab.desheldalm@tjrj.jus.br","video":"Agendamento por e-mail: gab.desheldalm@tjrj.jus.br","canal":"Ambos","emails":["gab.desheldalm@tjrj.jus.br"],"tels":[]},{"id":"d081","nome":"Heleno Ribeiro Pereira Nunes","cargo":"3º Vice Presidente","camara":"3º Vice Presidente","camaraNum":null,"secao":"Cúpula","anterior":"","orgaoEspecial":true,"presidenteCamara":false,"presencial":"Despacho com juízes auxiliares, presencial ou por telefone ( agendamento por telefone )","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d082","nome":"Horacio Dos Santos Ribeiro Neto","cargo":"Desembargador(a)","camara":"10ª Câmara de Direito Público","camaraNum":10,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d083","nome":"Humberto Dalla Bernardina De Pinho","cargo":"Desembargador(a)","camara":"5ª Câmara de Direito Privado","camaraNum":5,"secao":"Privado","anterior":"Vigésima Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"Online pelo próprio sistema do TJRJ ( o advogado escolhe se é presencial ou online )","canal":"Vídeo","emails":[],"tels":[]},{"id":"d084","nome":"Ines Da Trindade Chaves De Melo","cargo":"Desembargador(a)","camara":"3ª Câmara de Direito Público","camaraNum":3,"secao":"Público","anterior":"Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d085","nome":"Isabela Pessanha Chagas","cargo":"Desembargador(a)","camara":"10ª Câmara de Direito Público","camaraNum":10,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d086","nome":"Jacqueline Lima Montenegro","cargo":"Desembargador(a)","camara":"1ª Câmara de Direito Público","camaraNum":1,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d087","nome":"Jean Albert De Souza Saadi","cargo":"Desembargador(a)","camara":"2ª Câmara de Direito Privado","camaraNum":2,"secao":"Privado","anterior":"Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Quarta às 11h ( agendamento por telefone - 3133-6204","video":"Não despacha online","canal":"Presencial","emails":[],"tels":["3133-6204"]},{"id":"d088","nome":"João Batista Damasceno","cargo":"Desembargador(a)","camara":"11ª Câmara de Direito Privado","camaraNum":11,"secao":"Privado","anterior":"Vigésima Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d089","nome":"Joao Ziraldo Maia","cargo":"Desembargador(a)","camara":"4ª Câmara Criminal","camaraNum":4,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d090","nome":"Joaquim Domingos De Almeida Neto","cargo":"Desembargador(a)","camara":"7ª Câmara Criminal","camaraNum":7,"secao":"Criminal","anterior":"","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d091","nome":"Jose Acir Lessa Giordani","cargo":"Desembargador(a)","camara":"1ª Câmara de Direito Público","camaraNum":1,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d092","nome":"Jose Carlos Paes","cargo":"Desembargador(a)","camara":"12ª Câmara de Direito Privado","camaraNum":12,"secao":"Privado","anterior":"Décima Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d093","nome":"Jose Claudio De Macedo Fernandes","cargo":"Desembargador(a)","camara":"9ª Câmara de Direito Público","camaraNum":9,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d094","nome":"Jose Muinos Pineiro Filho","cargo":"Desembargador(a)","camara":"6ª Câmara Criminal","camaraNum":6,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d095","nome":"Jose Roberto Portugal Compasso","cargo":"Desembargador(a)","camara":"8ª Câmara de Direito Público","camaraNum":8,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d096","nome":"Juan Luiz Souza Vazquez","cargo":"Desembargador(a)","camara":"15ª Câmara de Direito Privado","camaraNum":15,"secao":"Privado","anterior":"Vigésima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d097","nome":"Katia Maria Amaral Jangutta","cargo":"Desembargador(a)","camara":"2ª Câmara Criminal","camaraNum":2,"secao":"Criminal","anterior":"","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d098","nome":"Katya Maria De Paula Menezes Monnerat","cargo":"Desembargador(a)","camara":"1ª Câmara Criminal","camaraNum":1,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d099","nome":"Leila Maria Rodrigues Pinto De Carvalho E Albuquerque","cargo":"Desembargador(a)","camara":"8ª Câmara de Direito Público","camaraNum":8,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d100","nome":"Leila Santos Lopes","cargo":"Desembargador(a)","camara":"18ª Câmara de Direito Privado","camaraNum":18,"secao":"Privado","anterior":"Décima Quinta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Não","video":"Mandar e-mail até sexta. Eles marcam para segunda","canal":"Vídeo","emails":[],"tels":[]},{"id":"d101","nome":"Lidia Maria Sodre De Moraes","cargo":"Desembargador(a)","camara":"6ª Câmara de Direito Público","camaraNum":6,"secao":"Público","anterior":"Vigésima Primeira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d102","nome":"Lucia Helena Do Passo","cargo":"Desembargador(a)","camara":"11ª Câmara de Direito Privado","camaraNum":11,"secao":"Privado","anterior":"Vigésima Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d103","nome":"Lucia Regina Esteves De Magalhaes","cargo":"Desembargador(a)","camara":"18ª Câmara de Direito Privado","camaraNum":18,"secao":"Privado","anterior":"Décima Quinta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Presencial - hora de chegada segunda","video":"Mandar e-mail. Eles marcam para segunda","canal":"Ambos","emails":[],"tels":[]},{"id":"d104","nome":"Luciano Saboia Rinaldi De Carvalho","cargo":"Desembargador(a)","camara":"19ª Câmara de Direito Privado","camaraNum":19,"secao":"Privado","anterior":"Vigésima Quinta Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d105","nome":"Luciano Silva Barreto","cargo":"Desembargador(a)","camara":"8ª Câmara Criminal","camaraNum":8,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d106","nome":"Luiz Alberto Carvalho Alves","cargo":"Desembargador(a)","camara":"7ª Câmara de Direito Público","camaraNum":7,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d107","nome":"Luiz Eduardo C Canabarro","cargo":"Desembargador(a)","camara":"14ª Câmara de Direito Privado","camaraNum":14,"secao":"Privado","anterior":"Nona Camara Civel","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d108","nome":"Luiz Fernando Pinto","cargo":"Desembargador(a)","camara":"3ª Câmara de Direito Privado","camaraNum":3,"secao":"Privado","anterior":"Décima Oitava Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"online no sistema","canal":"Vídeo","emails":[],"tels":[]},{"id":"d109","nome":"Luiz Henrique Oliveira Marques","cargo":"Desembargador(a)","camara":"20ª Câmara de Direito Privado","camaraNum":20,"secao":"Privado","anterior":"Décima Primeira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d110","nome":"Luiz Marcio Victor Alves Pereira","cargo":"Desembargador(a)","camara":"4ª Câmara Criminal","camaraNum":4,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d111","nome":"Luiz Noronha Dantas","cargo":"Desembargador(a)","camara":"6ª Câmara Criminal","camaraNum":6,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d112","nome":"Luiz Roldao De Freitas Gomes Filho","cargo":"Desembargador(a)","camara":"9ª Câmara de Direito Privado","camaraNum":9,"secao":"Privado","anterior":"Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d113","nome":"Luiz Umpierre De Mello Serra","cargo":"Desembargador(a)","camara":"21ª Câmara de Direito Privado","camaraNum":21,"secao":"Privado","anterior":"Décima Nona Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d114","nome":"Luiz Zveiter","cargo":"Desembargador(a)","camara":"1ª Câmara Criminal","camaraNum":1,"secao":"Criminal","anterior":"","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d115","nome":"Mafalda Lucchese","cargo":"Desembargador(a)","camara":"21ª Câmara de Direito Privado","camaraNum":21,"secao":"Privado","anterior":"Décima Nona Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d116","nome":"Marcel Laguna Duque Estrada","cargo":"Desembargador(a)","camara":"3ª Câmara de Direito Público","camaraNum":3,"secao":"Público","anterior":"Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d117","nome":"Marcelo Almeida De Moraes Marinho","cargo":"Desembargador(a)","camara":"11ª Câmara de Direito Privado","camaraNum":11,"secao":"Privado","anterior":"Vigésima Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d118","nome":"Marcelo Castro Anatocles Da Silva Ferreira","cargo":"Desembargador(a)","camara":"6ª Câmara Criminal","camaraNum":6,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d119","nome":"Marcelo Lima Buhatem","cargo":"Desembargador(a)","camara":"1ª Câmara de Direito Privado","camaraNum":1,"secao":"Privado","anterior":"Oitava Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"gab.desmarcelolb@tjrj.jus.br","canal":"Vídeo","emails":["gab.desmarcelolb@tjrj.jus.br"],"tels":[]},{"id":"d120","nome":"Marcia Alves Succi","cargo":"Desembargador(a)","camara":"16ª Câmara de Direito Privado","camaraNum":16,"secao":"Privado","anterior":"Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d121","nome":"Marcia Ferreira Alvarenga","cargo":"Desembargador(a)","camara":"8ª Câmara de Direito Privado","camaraNum":8,"secao":"Privado","anterior":"Décima Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"Mandar e-mail para agendamento","canal":"Vídeo","emails":[],"tels":[]},{"id":"d122","nome":"Marcia Perrini Bodart","cargo":"Desembargador(a)","camara":"4ª Câmara Criminal","camaraNum":4,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d123","nome":"Marcio Quintes Goncalves","cargo":"Desembargador(a)","camara":"9ª Câmara de Direito Público","camaraNum":9,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d124","nome":"Marcius Da Costa Ferreira","cargo":"Desembargador(a)","camara":"8ª Câmara Criminal","camaraNum":8,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d125","nome":"Marco Antonio Ibrahim","cargo":"Desembargador(a)","camara":"7ª Câmara de Direito Público","camaraNum":7,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d126","nome":"Marco Aurelio Bezerra De Melo","cargo":"Desembargador(a)","camara":"5ª Câmara de Direito Público","camaraNum":5,"secao":"Público","anterior":"Décima Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d127","nome":"Marcos Alcino De Azevedo Torres","cargo":"Desembargador(a)","camara":"11ª Câmara de Direito Privado","camaraNum":11,"secao":"Privado","anterior":"Vigésima Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d128","nome":"Marcos Andre Chut","cargo":"Desembargador(a)","camara":"22ª Câmara de Direito Privado","camaraNum":22,"secao":"Privado","anterior":"Vigésima Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d129","nome":"Marcus Henrique Pinto Basilio","cargo":"Desembargador(a)","camara":"7ª Câmara Criminal","camaraNum":7,"secao":"Criminal","anterior":"","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d130","nome":"Maria Aglae Tedesco Vilardo","cargo":"Desembargador(a)","camara":"10ª Câmara de Direito Público","camaraNum":10,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d131","nome":"Maria Angelica Guimaraes Guerra Guedes","cargo":"2º Vice Presidente","camara":"2º Vice Presidente","camaraNum":null,"secao":"Cúpula","anterior":"","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d132","nome":"Maria Celeste Pinto De Castro Jatahy","cargo":"Desembargador(a)","camara":"16ª Câmara de Direito Privado","camaraNum":16,"secao":"Privado","anterior":"Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d133","nome":"Maria Cristina De Brito Lima","cargo":"Desembargador(a)","camara":"9ª Câmara de Direito Público","camaraNum":9,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d134","nome":"Maria Da Gloria Oliveira Bandeira De Mello","cargo":"Desembargador(a)","camara":"13ª Câmara de Direito Privado","camaraNum":13,"secao":"Privado","anterior":"Vigésima Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d135","nome":"Maria Da Penha Nobre Mauro","cargo":"Desembargador(a)","camara":"6ª Câmara de Direito Privado","camaraNum":6,"secao":"Privado","anterior":"Décima Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Agendamento por email","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d136","nome":"Maria Helena Pinto Machado","cargo":"Desembargador(a)","camara":"16ª Câmara de Direito Privado","camaraNum":16,"secao":"Privado","anterior":"Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d137","nome":"Maria Isabel Paes Goncalves","cargo":"Desembargador(a)","camara":"9ª Câmara de Direito Privado","camaraNum":9,"secao":"Privado","anterior":"Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"online no próprio sistema","canal":"Vídeo","emails":[],"tels":[]},{"id":"d138","nome":"Maria Paula Gouvea Galhardo","cargo":"Desembargador(a)","camara":"8ª Câmara de Direito Público","camaraNum":8,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d139","nome":"Maria Regina Fonseca Nova Alves","cargo":"Desembargador(a)","camara":"18ª Câmara de Direito Privado","camaraNum":18,"secao":"Privado","anterior":"Décima Quinta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Presencial - hora de chegada segunda tarde (ligar antes)","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d140","nome":"Maria Sandra Kayat Direito","cargo":"Desembargador(a)","camara":"1ª Câmara Criminal","camaraNum":1,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d141","nome":"Maria Teresa Pontes Gazineu","cargo":"Desembargador(a)","camara":"8ª Câmara de Direito Privado","camaraNum":8,"secao":"Privado","anterior":"Décima Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d142","nome":"Marianna Fux","cargo":"Desembargador(a)","camara":"3ª Câmara de Direito Privado","camaraNum":3,"secao":"Privado","anterior":"Décima Oitava Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"online no sistema","canal":"Vídeo","emails":[],"tels":[]},{"id":"d143","nome":"Marilia De Castro Neves Vieira","cargo":"Desembargador(a)","camara":"15ª Câmara de Direito Privado","camaraNum":15,"secao":"Privado","anterior":"Vigésima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d144","nome":"Mario Guimaraes Neto","cargo":"Desembargador(a)","camara":"7ª Câmara de Direito Privado","camaraNum":7,"secao":"Privado","anterior":"Décima Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d145","nome":"Mauro Dickstein","cargo":"Desembargador(a)","camara":"5ª Câmara de Direito Público","camaraNum":5,"secao":"Público","anterior":"Décima Sexta Camara Civel","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d146","nome":"Mauro Pereira Martins","cargo":"Desembargador(a)","camara":"21ª Câmara de Direito Privado","camaraNum":21,"secao":"Privado","anterior":"Décima Nona Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d147","nome":"Milton Fernandes De Souza","cargo":"Desembargador(a)","camara":"4ª Câmara de Direito Privado","camaraNum":4,"secao":"Privado","anterior":"Quinta Camara Civel","orgaoEspecial":true,"presidenteCamara":true,"presencial":"","video":"Mandar email para agendamento","canal":"Vídeo","emails":[],"tels":[]},{"id":"d148","nome":"Mônica De Faria Sardas","cargo":"Desembargador(a)","camara":"19ª Câmara de Direito Privado","camaraNum":19,"secao":"Privado","anterior":"Vigésima Quinta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d149","nome":"Mônica Feldman De Mattos","cargo":"Desembargador(a)","camara":"6ª Câmara de Direito Público","camaraNum":6,"secao":"Público","anterior":"Vigésima Primeira Camara Civel","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d150","nome":"Monica Maria Costa Di Piero","cargo":"Desembargador(a)","camara":"1ª Câmara de Direito Privado","camaraNum":1,"secao":"Privado","anterior":"Oitava Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"gab.desmonicamcp@tjrj.jus.br","canal":"Vídeo","emails":["gab.desmonicamcp@tjrj.jus.br"],"tels":[]},{"id":"d151","nome":"Monica Tolledo De Oliveira","cargo":"Desembargador(a)","camara":"3ª Câmara Criminal","camaraNum":3,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d152","nome":"Murilo Andre Kieling Cardona Pereira","cargo":"Desembargador(a)","camara":"22ª Câmara de Direito Privado","camaraNum":22,"secao":"Privado","anterior":"Vigésima Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d153","nome":"Nadia Maria De Souza Freijanes","cargo":"Desembargador(a)","camara":"12ª Câmara de Direito Privado","camaraNum":12,"secao":"Privado","anterior":"Décima Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d154","nome":"Natacha Nascimento Gomes Tostes Gonçalves De Oliveira","cargo":"Desembargador(a)","camara":"17ª Câmara de Direito Privado","camaraNum":17,"secao":"Privado","anterior":"Vigésima Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"enviar e-mail / vai depender da agenda dela","canal":"Vídeo","emails":[],"tels":[]},{"id":"d155","nome":"Patricia Ribeiro Serra Vieira","cargo":"Desembargador(a)","camara":"2ª Câmara de Direito Público","camaraNum":2,"secao":"Público","anterior":"Décima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d156","nome":"Paulo Assed Estefan","cargo":"Desembargador(a)","camara":"1ª Câmara de Direito Público","camaraNum":1,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d157","nome":"Paulo Cesar Vieira De Carvalho Filho","cargo":"Desembargador(a)","camara":"4ª Câmara Criminal","camaraNum":4,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d158","nome":"Paulo De Oliveira Lanzillotta Baldez","cargo":"Desembargador(a)","camara":"6ª Câmara Criminal","camaraNum":6,"secao":"Criminal","anterior":"","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d159","nome":"Paulo De Tarso Neves","cargo":"Desembargador(a)","camara":"5ª Câmara Criminal","camaraNum":5,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d160","nome":"Paulo Sergio Prestes Dos Santos","cargo":"Desembargador(a)","camara":"9ª Câmara de Direito Privado","camaraNum":9,"secao":"Privado","anterior":"Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"","video":"Não recebe adv (memoriais somente por e-mail)","canal":"Vídeo","emails":[],"tels":[]},{"id":"d161","nome":"Paulo Sergio Rangel Do Nascimento","cargo":"Desembargador(a)","camara":"3ª Câmara Criminal","camaraNum":3,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d162","nome":"Paulo Wunder De Alencar","cargo":"Desembargador(a)","camara":"18ª Câmara de Direito Privado","camaraNum":18,"secao":"Privado","anterior":"Décima Quinta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d163","nome":"Pedro Freire Raguenet","cargo":"Desembargador(a)","camara":"1ª Câmara Criminal","camaraNum":1,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d164","nome":"Pedro Saraiva De Andrade Lemos","cargo":"Desembargador(a)","camara":"2ª Câmara de Direito Público","camaraNum":2,"secao":"Público","anterior":"Décima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d165","nome":"Peterson Barroso Simão","cargo":"Desembargador(a)","camara":"2ª Câmara Criminal","camaraNum":2,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d166","nome":"Regina Lucia Passos","cargo":"Desembargador(a)","camara":"5ª Câmara de Direito Privado","camaraNum":5,"secao":"Privado","anterior":"Vigésima Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Todas as segundas-feiras, após as 14:00 horas (ordem de chegada)","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d167","nome":"Renata Machado Cotta","cargo":"Desembargador(a)","camara":"2ª Câmara de Direito Privado","camaraNum":2,"secao":"Privado","anterior":"Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Segunda a partir de 12:30| Quarta a partir 13:30 ( ordem )","video":"Não despacha online","canal":"Presencial","emails":[],"tels":[]},{"id":"d168","nome":"Renata Maria Nicolau Cabo","cargo":"Desembargador(a)","camara":"1ª Câmara de Direito Público","camaraNum":1,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d169","nome":"Renata Silvares França Fadel","cargo":"Desembargador(a)","camara":"12ª Câmara de Direito Privado","camaraNum":12,"secao":"Privado","anterior":"Décima Quarta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d170","nome":"Renato Lima Charnaux Serta","cargo":"Desembargador(a)","camara":"14ª Câmara de Direito Privado","camaraNum":14,"secao":"Privado","anterior":"Nona Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d171","nome":"Ricardo Alberto Pereira","cargo":"Desembargador(a)","camara":"15ª Câmara de Direito Privado","camaraNum":15,"secao":"Privado","anterior":"Vigésima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Seg. 11horas por ordem de chegada","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d172","nome":"Ricardo Couto De Castro","cargo":"Presidente","camara":"Presidente","camaraNum":null,"secao":"Cúpula","anterior":"","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d173","nome":"Ricardo Rodrigues Cardozo","cargo":"Desembargador(a)","camara":"6ª Câmara de Direito Público","camaraNum":6,"secao":"Público","anterior":"Vigésima Primeira Camara Civel","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d174","nome":"Rogerio De Oliveira Souza","cargo":"Desembargador(a)","camara":"3ª Câmara de Direito Público","camaraNum":3,"secao":"Público","anterior":"Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d175","nome":"Rosa Helena Penna Macedo Guita","cargo":"Desembargador(a)","camara":"2ª Câmara Criminal","camaraNum":2,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d176","nome":"Rosa Maria Cirigliano Maneschy","cargo":"Desembargador(a)","camara":"19ª Câmara de Direito Privado","camaraNum":19,"secao":"Privado","anterior":"Vigésima Quinta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"no sistema do TJ","canal":"Vídeo","emails":[],"tels":[]},{"id":"d177","nome":"Rose Marie Pimentel Martins","cargo":"Desembargador(a)","camara":"5ª Câmara de Direito Público","camaraNum":5,"secao":"Público","anterior":"Décima Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d178","nome":"Rossidelio Lopes Da Fonte","cargo":"Desembargador(a)","camara":"7ª Câmara de Direito Público","camaraNum":7,"secao":"Público","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d179","nome":"Sandra Santarem Cardinali","cargo":"Desembargador(a)","camara":"17ª Câmara de Direito Privado","camaraNum":17,"secao":"Privado","anterior":"Vigésima Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"mandar e-mail","canal":"Vídeo","emails":[],"tels":[]},{"id":"d180","nome":"Sérgio Nogueira De Azeredo","cargo":"Desembargador(a)","camara":"20ª Câmara de Direito Privado","camaraNum":20,"secao":"Privado","anterior":"Décima Primeira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d181","nome":"Sergio Ricardo De Arruda Fernandes","cargo":"Desembargador(a)","camara":"10ª Câmara de Direito Privado","camaraNum":10,"secao":"Privado","anterior":"Primeira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Seg e quarta 13:30 horas as 16:30 horas","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d182","nome":"Sergio Seabra Varella","cargo":"Desembargador(a)","camara":"4ª Câmara de Direito Público","camaraNum":4,"secao":"Público","anterior":"Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d183","nome":"Sergio Wajzenberg","cargo":"Desembargador(a)","camara":"7ª Câmara de Direito Privado","camaraNum":7,"secao":"Privado","anterior":"Décima Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d184","nome":"Sidney Rosa Da Silva","cargo":"Desembargador(a)","camara":"7ª Câmara Criminal","camaraNum":7,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d185","nome":"Simone De Araujo Rolim","cargo":"Desembargador(a)","camara":"7ª Câmara Criminal","camaraNum":7,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d186","nome":"Sirley Abreu Biondi","cargo":"Desembargador(a)","camara":"6ª Câmara de Direito Privado","camaraNum":6,"secao":"Privado","anterior":"Décima Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Aguardar entrar em pauta e mandar email uma semana antes","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d187","nome":"Sônia De Fátima Dias","cargo":"Desembargador(a)","camara":"22ª Câmara de Direito Privado","camaraNum":22,"secao":"Privado","anterior":"Vigésima Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":true,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d188","nome":"Suely Lopes Magalhaes","cargo":"1º Vice Presidente","camara":"1º Vice Presidente","camaraNum":null,"secao":"Cúpula","anterior":"","orgaoEspecial":true,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d189","nome":"Suimei Meira Cavalieri","cargo":"Desembargador(a)","camara":"3ª Câmara Criminal","camaraNum":3,"secao":"Criminal","anterior":"","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d190","nome":"Teresa De Andrade","cargo":"Desembargador(a)","camara":"13ª Câmara de Direito Privado","camaraNum":13,"secao":"Privado","anterior":"Vigésima Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d191","nome":"Tereza Cristina Sobral Bittencourt Sampaio","cargo":"Desembargador(a)","camara":"13ª Câmara de Direito Privado","camaraNum":13,"secao":"Privado","anterior":"Vigésima Segunda Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d192","nome":"Valeria Dacheux Nascimento","cargo":"Desembargador(a)","camara":"6ª Câmara de Direito Privado","camaraNum":6,"secao":"Privado","anterior":"Décima Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Todos os dias por ordem","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d193","nome":"Vitor Marcelo Aranha Afonso Rodrigues","cargo":"Desembargador(a)","camara":"2ª Câmara de Direito Privado","camaraNum":2,"secao":"Privado","anterior":"Terceira Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Todos os dias na parte da tarde por ordem de chegada ( menos quarta ) | Não despacha online","video":"Não despacha online","canal":"Presencial","emails":[],"tels":[]},{"id":"d194","nome":"Wagner Cinelli De Paula Freitas","cargo":"Desembargador(a)","camara":"8ª Câmara de Direito Privado","camaraNum":8,"secao":"Privado","anterior":"Décima Sétima Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"Todos os dias - ligar antes para verificar a disponibilidade","video":"","canal":"Presencial","emails":[],"tels":[]},{"id":"d195","nome":"Werson Franco Pereira Rêgo","cargo":"Desembargador(a)","camara":"19ª Câmara de Direito Privado","camaraNum":19,"secao":"Privado","anterior":"Vigésima Quinta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"","canal":"Sem informação","emails":[],"tels":[]},{"id":"d196","nome":"Wilson Do Nascimento Reis","cargo":"Desembargador(a)","camara":"17ª Câmara de Direito Privado","camaraNum":17,"secao":"Privado","anterior":"Vigésima Sexta Camara Civel","orgaoEspecial":false,"presidenteCamara":false,"presencial":"","video":"solicitar por e-mail -","canal":"Vídeo","emails":[],"tels":[]}];
+const KEY = 'tjrj_despachos_v1';
 
-  var SOL = '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>';
-  var LUA = '<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"></path>';
+/* ---------- armazenamento (com reserva em memória) ---------- */
+let mem = {}, temStorage = true;
+try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); } catch(e){ temStorage = false; }
+function carregar(){
+  if(!temStorage) return mem;
+  try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ return {}; }
+}
+function gravar(o){
+  mem = o;
+  if(!temStorage) return false;
+  try { localStorage.setItem(KEY, JSON.stringify(o)); return true; } catch(e){ return false; }
+}
+let ficha = carregar();
 
-  btn.addEventListener('click', function () {
-    var escuro = raiz.getAttribute('data-tema') === 'escuro';
-    raiz.setAttribute('data-tema', escuro ? 'claro' : 'escuro');
-    txt.textContent = escuro ? 'Modo escuro' : 'Modo claro';
-    ic.innerHTML = escuro ? LUA : SOL;
-  });
+const CAMPOS = ['status','canal','dias','agendamento','email','telefone','sala','dataVisita','quemVisitou','notas'];
+function reg(id){
+  const r = ficha[id] || {};
+  return {
+    status: r.status || 'A visitar', canal: r.canal || '', dias: r.dias || '',
+    agendamento: r.agendamento || '', email: r.email || '', telefone: r.telefone || '',
+    sala: r.sala || '', dataVisita: r.dataVisita || '', quemVisitou: r.quemVisitou || '',
+    notas: r.notas || '', updated: r.updated || ''
+  };
+}
+const preenchido = id => {
+  const r = ficha[id]; if(!r) return false;
+  return CAMPOS.some(c => (r[c]||'').trim() !== '' && !(c==='status' && r[c]==='A visitar'));
+};
 
-  var bm = document.getElementById('btnMais');
-  var tm = document.getElementById('txtMais');
-  var im = document.getElementById('icMais');
-  var cx = document.getElementById('mais');
+/* ---------- utilidades ---------- */
+const semAcento = s => (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const esc = s => (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const el = id => document.getElementById(id);
+let tmr; function toast(msg){ const t = el('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(tmr); tmr = setTimeout(()=>t.classList.remove('show'), 2200); }
 
-  bm.addEventListener('click', function () {
-    var fechado = cx.classList.contains('oculto');
-    cx.classList.toggle('oculto');
-    tm.textContent = fechado ? 'Ver menos' : 'Ver mais';
-    im.innerHTML = fechado
-      ? '<path d="M18 15l-6-6-6 6"></path>'
-      : '<path d="M6 9l6 6 6-6"></path>';
-  });
+/* canal efetivo: o que você anotou vence o que veio da planilha */
+function canalDe(d){ return reg(d.id).canal || d.canal; }
+
+/* ---------- filtros ---------- */
+const f = { q:'', status:'', secao:'', camara:'', canal:'' };
+
+(function montarSelects(){
+  const secoes = [...new Set(DADOS.map(d=>d.secao))];
+  el('fSecao').innerHTML = '<option value="">Todas as seções</option>' + secoes.map(s=>`<option value="${s}">${s}</option>`).join('');
+  el('fCanal').innerHTML = '<option value="">Qualquer canal</option>' +
+    ['Presencial','Vídeo','Ambos','Não despacha','Sem informação'].map(s=>`<option value="${s}">${s}</option>`).join('');
+  atualizarCamaras();
 })();
-</script>
 
+function atualizarCamaras(){
+  const sel = el('fCamara'), atual = f.camara;
+  const lista = [...new Set(DADOS.filter(d=>!f.secao||d.secao===f.secao).map(d=>d.camara))]
+    .sort((a,b)=>{
+      const na = parseInt(a)||99, nb = parseInt(b)||99;
+      return na-nb || a.localeCompare(b,'pt');
+    });
+  sel.innerHTML = '<option value="">Todas as câmaras</option>' + lista.map(c=>`<option value="${c}">${c}</option>`).join('');
+  sel.value = lista.includes(atual) ? atual : '';
+  f.camara = sel.value;
+}
+
+function filtrar(){
+  const q = semAcento(f.q).trim();
+  return DADOS.filter(d=>{
+    const r = reg(d.id);
+    if(f.secao && d.secao !== f.secao) return false;
+    if(f.camara && d.camara !== f.camara) return false;
+    if(f.canal && canalDe(d) !== f.canal) return false;
+    if(f.status === '__seminfo'){ if(canalDe(d) !== 'Sem informação') return false; }
+    else if(f.status && r.status !== f.status) return false;
+    if(q){
+      const alvo = semAcento([d.nome,d.camara,d.secao,d.cargo,d.anterior,d.presencial,d.video,
+        r.dias,r.agendamento,r.email,r.telefone,r.sala,r.quemVisitou,r.notas,(d.emails||[]).join(' ')].join(' '));
+      if(!alvo.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+/* ---------- lista ---------- */
+function classeStatus(s){
+  return s==='Visitado'?'s-visitado':s==='Agendado'?'s-agendado':s==='Não recebe'?'s-nao':'s-visitar';
+}
+function tagStatus(s){
+  const m = {'Visitado':'ok','Agendado':'sc','Não recebe':'nk','A visitar':'pd'};
+  return `<span class="tag ${m[s]||'pd'}">${s}</span>`;
+}
+function tagCanal(d){
+  const r = reg(d.id), c = canalDe(d);
+  const cls = c==='Sem informação' ? 'ghost' : 'b';
+  const marca = r.canal ? ' ✓' : '';
+  return `<span class="tag ${cls}">${c}${marca}</span>`;
+}
+
+function render(){
+  const res = filtrar();
+  const main = el('lista');
+  el('resumo').textContent = res.length + (res.length===1?' desembargador':' desembargadores');
+  const ativo = f.q||f.status||f.secao||f.camara||f.canal;
+  el('limpar').hidden = !ativo;
+
+  if(!res.length){
+    main.innerHTML = `<div class="empty"><b>Nada com esses filtros</b>Tente limpar a busca ou trocar a câmara.</div>`;
+    return;
+  }
+  const grupos = {};
+  res.forEach(d=>{ (grupos[d.camara] = grupos[d.camara] || []).push(d); });
+  const ordem = Object.keys(grupos).sort((a,b)=>{
+    const na=parseInt(a)||99, nb=parseInt(b)||99;
+    return na-nb || a.localeCompare(b,'pt');
+  });
+
+  main.innerHTML = ordem.map(cam=>{
+    const itens = grupos[cam].map(d=>{
+      const r = reg(d.id);
+      const detalhe = [r.dias, r.agendamento].filter(Boolean).join(' — ')
+        || [d.presencial, d.video].filter(Boolean).join(' • ');
+      const contatos = [];
+      if(r.email || (d.emails||[])[0]) contatos.push('✉︎');
+      if(r.telefone || (d.tels||[])[0]) contatos.push('☎︎');
+      return `<button class="card ${classeStatus(r.status)}" data-id="${d.id}">
+        ${r.status==='Visitado'?'<span class="stamp">VISITADO</span>':''}
+        <div class="nome">${esc(d.nome)}</div>
+        <div class="sub">${esc(d.camara)}${d.presidenteCamara?' · Presidente da câmara':''}${d.orgaoEspecial?' · Órgão Especial':''}</div>
+        <div class="tags">
+          ${tagStatus(r.status)}
+          ${tagCanal(d)}
+          ${r.sala?`<span class="tag">Sala ${esc(r.sala)}</span>`:''}
+          ${r.dataVisita?`<span class="tag ok">${dataBR(r.dataVisita)}</span>`:''}
+          ${contatos.length?`<span class="tag">${contatos.join(' ')}</span>`:''}
+        </div>
+        ${detalhe?`<div class="note">${esc(detalhe.slice(0,190))}${detalhe.length>190?'…':''}</div>`:''}
+      </button>`;
+    }).join('');
+    const vis = grupos[cam].filter(d=>reg(d.id).status==='Visitado').length;
+    return `<div class="groupname">${esc(cam)}<i></i><em>${vis}/${grupos[cam].length}</em></div>${itens}`;
+  }).join('');
+}
+
+function dataBR(iso){
+  if(!iso) return '';
+  const p = iso.split('-'); return p.length===3 ? `${p[2]}/${p[1]}/${p[0]}` : iso;
+}
+
+function atualizarTopo(){
+  let v=0,a=0,n=0;
+  DADOS.forEach(d=>{ const s = reg(d.id).status; if(s==='Visitado')v++; else if(s==='Agendado')a++; else if(s==='Não recebe')n++; });
+  const total = DADOS.length;
+  el('stVis').textContent = v; el('stAge').textContent = a;
+  el('stFal').textContent = total - v - n; el('stTot').textContent = total;
+  el('prog').style.width = Math.round((v/(total-n||1))*100) + '%';
+}
+
+/* ---------- ficha individual ---------- */
+let abertoId = null;
+function abrir(id){
+  const d = DADOS.find(x=>x.id===id); if(!d) return;
+  const r = reg(id);
+  abertoId = id;
+  el('fNome').textContent = d.nome;
+  el('fCargo').textContent = [d.camara, d.presidenteCamara?'Presidente da câmara':'', d.orgaoEspecial?'Órgão Especial':'']
+    .filter(Boolean).join(' · ');
+
+  const emailSug = r.email || (d.emails||[])[0] || '';
+  const telSug = r.telefone || (d.tels||[])[0] || '';
+  const temOriginal = d.presencial || d.video || d.anterior;
+
+  el('fBody').innerHTML = `
+    ${temOriginal ? `<div class="block"><h3>Da lista original</h3>
+      ${d.presencial?`<p class="orig"><b>Presencial</b>${esc(d.presencial)}</p>`:''}
+      ${d.video?`<p class="orig"><b>Por vídeo</b>${esc(d.video)}</p>`:''}
+      ${d.anterior?`<p class="orig"><b>Câmara anterior</b>${esc(d.anterior)}</p>`:''}
+    </div>`:''}
+
+    <div class="block">
+      <h3>Situação da visita</h3>
+      <div class="seg" id="segStatus">
+        ${['A visitar','Agendado','Visitado','Não recebe'].map(s=>
+          `<button type="button" data-v="${s}" aria-pressed="${r.status===s}">${s}</button>`).join('')}
+      </div>
+      <label for="iData">Data da visita ou do agendamento</label>
+      <input type="date" id="iData" value="${esc(r.dataVisita)}">
+      <label for="iQuem">Quem foi</label>
+      <input type="text" id="iQuem" value="${esc(r.quemVisitou)}" placeholder="Ex.: Edgard">
+    </div>
+
+    <div class="block">
+      <h3>Como ele despacha</h3>
+      <div class="seg seg3" id="segCanal">
+        ${['Presencial','Vídeo','Ambos','Não despacha'].map(s=>
+          `<button type="button" data-v="${s}" aria-pressed="${r.canal===s}">${s}</button>`).join('')}
+      </div>
+      <label for="iDias">Dias e horários</label>
+      <input type="text" id="iDias" value="${esc(r.dias)}" placeholder="Ex.: segunda e quarta, a partir das 13h30">
+      <label for="iAgend">Como agendar / ordem de chegada</label>
+      <textarea id="iAgend" placeholder="Ex.: por ordem de chegada, ligar antes para confirmar">${esc(r.agendamento)}</textarea>
+    </div>
+
+    <div class="block">
+      <h3>Contato do gabinete</h3>
+      <label for="iEmail">E-mail</label>
+      <input type="email" id="iEmail" value="${esc(emailSug)}" inputmode="email" autocapitalize="off" placeholder="gab.des...@tjrj.jus.br">
+      <label for="iTel">Telefone</label>
+      <input type="tel" id="iTel" value="${esc(telSug)}" placeholder="(21) 3133-0000">
+      <label for="iSala">Sala / andar</label>
+      <input type="text" id="iSala" value="${esc(r.sala)}" placeholder="Ex.: Lâmina IV, 7º andar">
+      <div class="links">
+        ${emailSug?`<a href="mailto:${esc(emailSug)}">Escrever e-mail</a>`:''}
+        ${telSug?`<a href="tel:${esc(telSug.replace(/[^\d+]/g,''))}">Ligar</a>`:''}
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Anotações da visita</h3>
+      <textarea id="iNotas" placeholder="O que ele falou, como recebeu, o que levar da próxima vez…">${esc(r.notas)}</textarea>
+      ${r.updated?`<p class="orig" style="margin-top:10px"><b>Última alteração</b>${esc(r.updated)}</p>`:''}
+    </div>`;
+
+  el('fBody').querySelectorAll('.seg').forEach(seg=>{
+    seg.addEventListener('click', e=>{
+      const b = e.target.closest('button[data-v]'); if(!b) return;
+      const jaAtivo = b.getAttribute('aria-pressed') === 'true';
+      seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
+      if(seg.id === 'segCanal' && jaAtivo) return;           // clicar de novo desmarca o canal
+      if(seg.id === 'segStatus' && jaAtivo){ b.setAttribute('aria-pressed','true'); return; }
+      b.setAttribute('aria-pressed','true');
+    });
+  });
+
+  el('sheet').classList.add('open');
+  el('fBody').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function fechar(){ el('sheet').classList.remove('open'); abertoId = null; document.body.style.overflow = ''; }
+
+function salvar(){
+  if(!abertoId) return;
+  const marcado = seg => { const b = el(seg)?.querySelector('button[aria-pressed="true"]'); return b ? b.dataset.v : ''; };
+  const r = {
+    status: marcado('segStatus') || 'A visitar',
+    canal: marcado('segCanal'),
+    dias: el('iDias').value.trim(),
+    agendamento: el('iAgend').value.trim(),
+    email: el('iEmail').value.trim(),
+    telefone: el('iTel').value.trim(),
+    sala: el('iSala').value.trim(),
+    dataVisita: el('iData').value,
+    quemVisitou: el('iQuem').value.trim(),
+    notas: el('iNotas').value.trim(),
+    updated: new Date().toLocaleString('pt-BR')
+  };
+  ficha[abertoId] = r;
+  const ok = gravar(ficha);
+  fechar(); render(); atualizarTopo();
+  toast(ok ? 'Ficha salva' : 'Salvo só nesta sessão');
+}
+
+/* ---------- tema claro / escuro ---------- */
+const TEMA_KEY = 'tjrj_tema';
+function pintarTema(t){
+  document.documentElement.setAttribute('data-tema', t);
+  el('temaBtn').textContent = t === 'escuro' ? '☀' : '☾';
+  el('temaBtn').setAttribute('aria-label', t === 'escuro' ? 'Mudar para tema claro' : 'Mudar para tema escuro');
+  const meta = document.querySelector('meta[name=theme-color]');
+  if(meta) meta.setAttribute('content', t === 'escuro' ? '#071426' : '#0C2340');
+}
+pintarTema(document.documentElement.getAttribute('data-tema') || 'claro');
+el('temaBtn').addEventListener('click', ()=>{
+  const novo = document.documentElement.getAttribute('data-tema') === 'escuro' ? 'claro' : 'escuro';
+  pintarTema(novo);
+  try{ localStorage.setItem(TEMA_KEY, novo); }catch(e){}
+});
+
+/* ---------- eventos ---------- */
+el('q').addEventListener('input', e=>{ f.q = e.target.value; el('clrQ').style.display = f.q?'block':'none'; render(); });
+el('clrQ').addEventListener('click', ()=>{ el('q').value=''; f.q=''; el('clrQ').style.display='none'; render(); });
+el('chipsStatus').addEventListener('click', e=>{
+  const b = e.target.closest('.chip'); if(!b) return;
+  el('chipsStatus').querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true'); f.status = b.dataset.st; render();
+});
+el('fSecao').addEventListener('change', e=>{ f.secao = e.target.value; atualizarCamaras(); render(); });
+el('fCamara').addEventListener('change', e=>{ f.camara = e.target.value; render(); });
+el('fCanal').addEventListener('change', e=>{ f.canal = e.target.value; render(); });
+el('limpar').addEventListener('click', ()=>{
+  f.q=f.status=f.secao=f.camara=f.canal='';
+  el('q').value=''; el('clrQ').style.display='none';
+  el('fSecao').value=''; el('fCanal').value='';
+  el('chipsStatus').querySelectorAll('.chip').forEach((x,i)=>x.setAttribute('aria-pressed', i===0?'true':'false'));
+  atualizarCamaras(); render();
+});
+el('lista').addEventListener('click', e=>{ const c = e.target.closest('.card'); if(c) abrir(c.dataset.id); });
+el('salvar').addEventListener('click', salvar);
+document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', fechar));
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ fechar(); el('menu').classList.remove('open'); } });
+
+/* ---------- menu / backup ---------- */
+el('menuBtn').addEventListener('click', ()=>{
+  const n = Object.keys(ficha).filter(preenchido).length;
+  el('mnote').textContent = temStorage
+    ? `${n} ficha(s) preenchida(s), guardadas neste aparelho. Baixe o backup de vez em quando.`
+    : 'Este ambiente não guarda os dados. Publique o arquivo no GitHub Pages para que fique salvo no aparelho.';
+  el('menu').classList.add('open');
+});
+document.querySelectorAll('[data-mclose]').forEach(b=>b.addEventListener('click', ()=>el('menu').classList.remove('open')));
+
+function baixar(nome, texto, tipo){
+  const blob = new Blob([texto], {type:tipo});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = nome; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
+}
+const hoje = () => new Date().toISOString().slice(0,10);
+
+el('mExport').addEventListener('click', ()=>{
+  baixar(`despachos-tjrj-${hoje()}.json`, JSON.stringify(ficha,null,1), 'application/json');
+  el('menu').classList.remove('open');
+});
+el('mExportCsv').addEventListener('click', ()=>{
+  const cab = ['Nome','Câmara','Seção','Status','Canal','Dias/horários','Agendamento','E-mail','Telefone','Sala','Data','Quem foi','Anotações'];
+  const q = s => '"' + String(s||'').replace(/"/g,'""') + '"';
+  const linhas = DADOS.map(d=>{ const r = reg(d.id);
+    return [d.nome,d.camara,d.secao,r.status,canalDe(d),r.dias||d.presencial,r.agendamento||d.video,
+            r.email||(d.emails||[])[0]||'',r.telefone||(d.tels||[])[0]||'',r.sala,dataBR(r.dataVisita),r.quemVisitou,r.notas].map(q).join(';');
+  });
+  baixar(`despachos-tjrj-${hoje()}.csv`, '\ufeff'+[cab.map(q).join(';'), ...linhas].join('\r\n'), 'text/csv');
+  el('menu').classList.remove('open');
+});
+el('mImport').addEventListener('click', ()=>{ el('fileIn').click(); el('menu').classList.remove('open'); });
+el('fileIn').addEventListener('change', e=>{
+  const arq = e.target.files[0]; if(!arq) return;
+  const fr = new FileReader();
+  fr.onload = ()=>{
+    try{
+      const dados = JSON.parse(fr.result);
+      if(typeof dados !== 'object' || Array.isArray(dados)) throw 0;
+      ficha = Object.assign({}, ficha, dados);
+      gravar(ficha); render(); atualizarTopo();
+      toast('Backup restaurado');
+    }catch(err){ toast('Arquivo não reconhecido'); }
+    e.target.value = '';
+  };
+  fr.readAsText(arq);
+});
+el('mReset').addEventListener('click', ()=>{
+  if(!confirm('Apagar todas as fichas preenchidas? Isso não dá para desfazer.')) return;
+  ficha = {}; gravar(ficha); render(); atualizarTopo();
+  el('menu').classList.remove('open'); toast('Fichas apagadas');
+});
+
+render(); atualizarTopo();
+</script>
 </body>
 </html>
