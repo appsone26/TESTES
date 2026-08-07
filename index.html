@@ -184,6 +184,7 @@ textarea{min-height:84px;resize:vertical}
 .mcard{position:absolute;right:10px;top:calc(56px + env(safe-area-inset-top));background:var(--card);border:1px solid var(--line);border-radius:var(--r);width:min(300px,calc(100% - 20px));box-shadow:0 14px 34px rgba(6,17,30,.4);overflow:hidden}
 .mcard button{display:block;width:100%;text-align:left;background:none;border:0;padding:13px 14px;border-bottom:1px solid var(--line);font-size:14.5px}
 .mcard button:last-child{border-bottom:0}
+.mcard button[hidden]{display:none}
 .mcard button small{display:block;font-size:11.5px;color:var(--ink-3);font-weight:400;margin-top:2px;line-height:1.3}
 .mcard .warn{color:var(--no)}
 .mnote{padding:11px 14px;font-size:12px;color:var(--ink-3);background:var(--field);border-bottom:1px solid var(--line)}
@@ -201,6 +202,41 @@ textarea{min-height:84px;resize:vertical}
 .sync .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sync button{margin-left:auto;flex:none;background:rgba(255,255,255,.17);color:var(--head-fg);border:0;border-radius:7px;padding:4px 11px;font-size:11.5px;font-weight:600}
 
+/* ---------- tela de entrada ---------- */
+.login{position:fixed;inset:0;z-index:120;background:linear-gradient(160deg,var(--head-1),var(--head-2));display:none;align-items:center;justify-content:center;padding:22px}
+.login.open{display:flex}
+.lcard{background:var(--card);border-radius:16px;width:min(360px,100%);padding:26px 22px;box-shadow:0 20px 50px rgba(6,17,30,.45)}
+.lcard h1{margin:0 0 4px;font-size:21px;letter-spacing:-.01em}
+.lcard .sub{margin:0 0 20px;font-size:13px;color:var(--ink-3);line-height:1.4}
+.lcard label{display:block;font-size:11.5px;color:var(--ink-3);margin:12px 0 5px;font-weight:600}
+.lcard input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink);font-size:16px}
+.lcard .entrar{width:100%;margin-top:18px;padding:13px;border:0;border-radius:10px;background:var(--head-2);color:#fff;font-size:15.5px;font-weight:600}
+.lcard .entrar:disabled{opacity:.55}
+.lerro{margin:12px 0 0;font-size:12.5px;color:var(--no);line-height:1.4;min-height:1px}
+.lnota{margin:16px 0 0;font-size:11.5px;color:var(--ink-3);line-height:1.45}
+
+/* ---------- usuários ---------- */
+.ucard{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--line);border-radius:var(--r);width:min(380px,calc(100% - 24px));max-height:82vh;overflow-y:auto;box-shadow:0 18px 44px rgba(6,17,30,.45)}
+.ucard h3{margin:0;padding:14px;font-size:15px;border-bottom:1px solid var(--line)}
+.ulista{padding:4px 0}
+.uitem{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.uitem .un{flex:1;min-width:0}
+.uitem b{display:block;font-size:14px}
+.uitem span{display:block;font-size:11.5px;color:var(--ink-3);word-break:break-all}
+.uitem .uacao{background:var(--field);border:1px solid var(--line);border-radius:7px;padding:5px 9px;font-size:11.5px;flex:none}
+.uitem.off{opacity:.5}
+.uform{padding:12px 14px;border-top:1px solid var(--line);background:var(--field)}
+.uform input{width:100%;padding:9px 10px;margin-bottom:7px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font-size:15px}
+.uform button{width:100%;padding:10px;border:0;border-radius:8px;background:var(--head-2);color:#fff;font-size:14px;font-weight:600}
+
+/* ---------- histórico da ficha ---------- */
+.hist{max-height:104px;overflow-y:auto;border:1px solid var(--line);border-radius:9px;background:var(--field);padding:8px 10px;margin-top:8px;-webkit-overflow-scrolling:touch}
+.hist p{margin:0 0 7px;font-size:11.5px;line-height:1.4;color:var(--ink-2)}
+.hist p:last-child{margin-bottom:0}
+.hist b{color:var(--ink)}
+.hist i{font-style:normal;color:var(--ink-3)}
+.hvazio{font-size:11.5px;color:var(--ink-3);margin:0}
+
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--head-1);color:#fff;border:1px solid var(--head-2);padding:11px 18px;border-radius:10px;font-size:13.5px;font-weight:600;opacity:0;transition:.22s;z-index:90;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
@@ -210,7 +246,7 @@ textarea{min-height:84px;resize:vertical}
   @page{ size:A4; margin:14mm 12mm; }
   html,body{background:#fff!important;color:#000!important}
   body{max-width:none;margin:0;padding:0;font-size:10.5pt}
-  header,.filters,main,.sheet,.menu,.toast{display:none!important}
+  header,.filters,main,.sheet,.menu,.toast,.login{display:none!important}
   #printArea{display:block!important}
   .pr-head{border-bottom:2.5pt solid #0C2340;padding-bottom:6pt;margin-bottom:12pt}
   .pr-head h1{margin:0;font-size:15pt;letter-spacing:.02em;color:#0C2340}
@@ -318,11 +354,13 @@ textarea{min-height:84px;resize:vertical}
   <div class="backdrop" data-mclose></div>
   <div class="mcard">
     <div class="mnote" id="mnote"></div>
-    <button id="mSala">Sala compartilhada<br><small id="mSalaSub">Não conectado</small></button>
+    <button id="mUsuarios" hidden>Usuários<br><small>Criar, redefinir senha, desativar</small></button>
+    <button id="mSenha">Trocar minha senha</button>
     <button id="mPrint">Imprimir / salvar em PDF</button>
     <button id="mExport">Baixar backup (.json)</button>
     <button id="mExportCsv">Exportar planilha (.csv)</button>
     <button id="mImport">Restaurar backup</button>
+    <button id="mSair" class="warn">Sair desta conta</button>
   </div>
 </div>
 <div class="menu" id="menuPdf">
@@ -335,21 +373,30 @@ textarea{min-height:84px;resize:vertical}
     <button data-pr="feito">Relatório do que já foi feito<br><small>Só os visitados, com data e quem foi</small></button>
   </div>
 </div>
-<div class="menu" id="menuSala">
-  <div class="backdrop" data-sclose></div>
-  <div class="mcard">
-    <div class="mnote">O código é combinado com a equipe e digitado uma vez. Quem tem o link mas não tem o código não enxerga nada.</div>
-    <div class="campo">
-      <label for="iSalaCod">Código da sala</label>
-      <input type="text" id="iSalaCod" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="Ex.: quinto2026">
+<div class="menu" id="menuUsuarios">
+  <div class="backdrop" data-uclose></div>
+  <div class="ucard">
+    <h3>Usuários</h3>
+    <div class="ulista" id="uLista"></div>
+    <div class="uform">
+      <input type="text" id="uNome" placeholder="Nome" autocomplete="off">
+      <input type="email" id="uEmail" placeholder="E-mail" autocapitalize="off" autocomplete="off">
+      <input type="text" id="uSenha" placeholder="Senha inicial (4 dígitos)" inputmode="numeric" autocomplete="off">
+      <button id="uCriar">Criar usuário</button>
     </div>
-    <div class="campo">
-      <label for="iQuemSou">Seu nome (aparece em "alterado por")</label>
-      <input type="text" id="iQuemSou" autocomplete="off" placeholder="Ex.: Edgard">
-    </div>
-    <button id="salaConectar" class="ok">Conectar e sincronizar</button>
-    <button id="salaEnviarTudo">Enviar para a sala o que já está neste aparelho<br><small>Use uma vez, se você preencheu fichas antes de conectar</small></button>
-    <button id="salaSair" class="warn">Desconectar deste aparelho<br><small>As fichas continuam aqui, mas param de sincronizar</small></button>
+  </div>
+</div>
+<div class="login" id="login">
+  <div class="lcard">
+    <h1>Despachos TJRJ</h1>
+    <p class="sub">Roteiro de visitação aos gabinetes. Entre para ver e anotar as visitas.</p>
+    <label for="lEmail">E-mail</label>
+    <input type="email" id="lEmail" autocapitalize="off" autocomplete="username" spellcheck="false" placeholder="voce@exemplo.com.br">
+    <label for="lSenha">Senha</label>
+    <input type="password" id="lSenha" inputmode="numeric" autocomplete="current-password" placeholder="••••">
+    <button class="entrar" id="lEntrar">Entrar</button>
+    <p class="lerro" id="lErro"></p>
+    <p class="lnota">Esqueceu a senha? Peça ao administrador para redefinir — ele faz isso pela própria tela do app.</p>
   </div>
 </div>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
@@ -575,7 +622,11 @@ function abrir(id){
     <div class="block">
       <h3>Anotações da visita</h3>
       <textarea id="iNotas" placeholder="O que ele falou, como recebeu, o que levar da próxima vez…">${esc(r.notas)}</textarea>
-      ${r.updated?`<p class="orig" style="margin-top:10px"><b>Última alteração</b>${esc(r.updated)}${r.porQuem?' — por '+esc(r.porQuem):''}</p>`:''}
+    </div>
+
+    <div class="block">
+      <h3>Histórico</h3>
+      <div class="hist" id="fHist">${caixaHistorico(id)}</div>
     </div>`;
 
   el('fBody').querySelectorAll('.seg').forEach(seg=>{
@@ -613,10 +664,12 @@ function salvar(){
     updated: new Date().toLocaleString('pt-BR')
   };
   const idSalvo = abertoId;
+  const antes = reg(abertoId);
   ficha[abertoId] = r;
   const ok = gravar(ficha);
   fechar(); render(); atualizarTopo();
   toast(ok ? 'Ficha salva' : 'Salvo só nesta sessão');
+  registrarMudancas(idSalvo, antes, r);
   marcarPendente(idSalvo);
 }
 
@@ -799,7 +852,7 @@ el('limpar').addEventListener('click', ()=>{
 el('lista').addEventListener('click', e=>{ const c = e.target.closest('.card'); if(c) abrir(c.dataset.id); });
 el('salvar').addEventListener('click', salvar);
 document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', fechar));
-document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ fechar(); el('menu').classList.remove('open'); el('menuPdf').classList.remove('open'); el('menuSala').classList.remove('open'); } });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ fechar(); el('menu').classList.remove('open'); el('menuPdf').classList.remove('open'); el('menuUsuarios').classList.remove('open'); } });
 
 /* ---------- menu / backup ---------- */
 el('menuBtn').addEventListener('click', ()=>{
@@ -841,9 +894,18 @@ el('fileIn').addEventListener('change', e=>{
     try{
       const dados = JSON.parse(fr.result);
       if(typeof dados !== 'object' || Array.isArray(dados)) throw 0;
+      const ids = Object.keys(dados);
       ficha = Object.assign({}, ficha, dados);
       gravar(ficha); render(); atualizarTopo();
-      toast('Backup restaurado');
+      const autor = (prompt('De quem é o trabalho deste backup? (aparece no histórico de cada ficha)', '') || '').trim();
+      ids.forEach(id=>{
+        histLocal(id, [{ des_id:id, campo:'__importado', valor_antes:'', valor_depois:autor }]);
+        if(!pend.includes(id)) pend.push(id);
+      });
+      histPend = histPend.concat(ids.map(id=>({ des_id:id, campo:'__importado', valor_antes:'', valor_depois:autor })));
+      gravarPend(); gravarHistPend(); pintarSync();
+      toast(ids.length + ' ficha(s) restaurada(s)');
+      sincronizar(true);
     }catch(err){ toast('Arquivo não reconhecido'); }
     e.target.value = '';
   };
@@ -852,146 +914,328 @@ el('fileIn').addEventListener('change', e=>{
 
 render(); atualizarTopo();
 
-/* ---------- sala compartilhada (Supabase) ---------- */
+/* ---------- login + sincronização (Supabase) ---------- */
 const SUPA_URL = 'https://atbljrjlsitzxwvypcqj.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0Ymxqcmpsc2l0enh3dnlwY3FqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwNjE1ODIsImV4cCI6MjEwMTYzNzU4Mn0.h5QaIhMcI-c0LGL3gYRQZoHepkR7Qtytl9maPiUzeRo';
-const SALA_KEY = 'tjrj_sala', NOME_KEY = 'tjrj_nome', PEND_KEY = 'tjrj_pend';
+const TOK_KEY='tjrj_token', EU_KEY='tjrj_eu', PEND_KEY='tjrj_pend', HPEND_KEY='tjrj_histpend', HIST_KEY='tjrj_hist';
 
 const lsGet = k => { try{ return localStorage.getItem(k) || ''; }catch(e){ return ''; } };
 const lsSet = (k,v) => { try{ localStorage.setItem(k,v); }catch(e){} };
 const lsDel = k => { try{ localStorage.removeItem(k); }catch(e){} };
+const lsJSON = (k, alt) => { try{ const v = JSON.parse(lsGet(k)); return v === null ? alt : v; }catch(e){ return alt; } };
 
-let sala = lsGet(SALA_KEY), quem = lsGet(NOME_KEY);
-let pend = [];
-try{ pend = JSON.parse(lsGet(PEND_KEY) || '[]'); if(!Array.isArray(pend)) pend = []; }catch(e){ pend = []; }
+let token = lsGet(TOK_KEY);
+let eu = lsJSON(EU_KEY, null);
+let pend = lsJSON(PEND_KEY, []);      if(!Array.isArray(pend)) pend = [];
+let histPend = lsJSON(HPEND_KEY, []); if(!Array.isArray(histPend)) histPend = [];
+let hist = lsJSON(HIST_KEY, {});      if(typeof hist !== 'object' || !hist) hist = {};
 let sincronizando = false, falhou = false;
 
 function gravarPend(){ lsSet(PEND_KEY, JSON.stringify(pend)); }
+function gravarHistPend(){ lsSet(HPEND_KEY, JSON.stringify(histPend)); }
+function gravarHist(){ lsSet(HIST_KEY, JSON.stringify(hist)); }
 
-/* nome do campo aqui  ->  nome da coluna no banco */
+/* campo daqui -> coluna do banco */
 const COLS = { status:'status', canal:'canal', dias:'dias', agendamento:'agendamento',
   email:'email', telefone:'telefone', sala:'sala', dataVisita:'data_visita',
   quemVisitou:'quem_visitou', notas:'notas' };
 
+const ROTULO = { status:'Situação', canal:'Como despacha', dias:'Dias e horários',
+  agendamento:'Como agendar', email:'E-mail', telefone:'Telefone', sala:'Sala / andar',
+  dataVisita:'Data da visita', quemVisitou:'Quem foi', notas:'Anotações' };
+
+function cab(){
+  const h = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json' };
+  if(token) h['x-token'] = token;
+  return h;
+}
+async function rpc(nome, args){
+  const resp = await fetch(SUPA_URL + '/rest/v1/rpc/' + nome, {
+    method:'POST', headers: cab(), body: JSON.stringify(args || {})
+  });
+  const txt = await resp.text();
+  let corpo = null;
+  try{ corpo = txt ? JSON.parse(txt) : null; }catch(e){ corpo = null; }
+  if(!resp.ok){
+    const msg = (corpo && (corpo.message || corpo.hint)) || 'Não deu certo';
+    throw new Error(msg);
+  }
+  return corpo;
+}
+
+/* ---------- entrada ---------- */
+function mostrarLogin(mostrar){
+  el('login').classList.toggle('open', !!mostrar);
+  if(mostrar){ el('lErro').textContent = ''; el('lSenha').value = ''; }
+}
+async function entrar(){
+  const email = el('lEmail').value.trim(), senha = el('lSenha').value;
+  if(!email || !senha){ el('lErro').textContent = 'Preencha e-mail e senha.'; return; }
+  if(!navigator.onLine){ el('lErro').textContent = 'Sem internet. A primeira entrada precisa de conexão.'; return; }
+  el('lEntrar').disabled = true; el('lEntrar').textContent = 'Entrando…'; el('lErro').textContent = '';
+  try{
+    const r = await rpc('entrar', { p_email: email, p_senha: senha });
+    const dado = Array.isArray(r) ? r[0] : r;
+    if(!dado || !dado.token) throw new Error('E-mail ou senha não confere');
+    token = dado.token;
+    eu = { id: dado.usuario_id, nome: dado.nome, papel: dado.papel };
+    lsSet(TOK_KEY, token); lsSet(EU_KEY, JSON.stringify(eu));
+    mostrarLogin(false); aplicarPapel(); pintarSync();
+    await sincronizar(true);
+    toast('Olá, ' + eu.nome.split(' ')[0]);
+  }catch(e){
+    el('lErro').textContent = e.message || 'Não deu certo';
+  }
+  el('lEntrar').disabled = false; el('lEntrar').textContent = 'Entrar';
+}
+function sairDaConta(silencioso){
+  if(token) rpc('sair').catch(()=>{});
+  token = ''; eu = null;
+  lsDel(TOK_KEY); lsDel(EU_KEY);
+  aplicarPapel(); pintarSync();
+  if(!silencioso) mostrarLogin(true);
+}
+function aplicarPapel(){
+  const b = el('mUsuarios');
+  if(b) b.hidden = !(eu && eu.papel === 'admin');
+}
+
+el('lEntrar').addEventListener('click', entrar);
+el('lSenha').addEventListener('keydown', e=>{ if(e.key === 'Enter') entrar(); });
+el('mSair').addEventListener('click', ()=>{
+  if(!confirm('Sair desta conta? As fichas continuam salvas neste aparelho.')) return;
+  el('menu').classList.remove('open'); sairDaConta();
+});
+el('mSenha').addEventListener('click', async ()=>{
+  el('menu').classList.remove('open');
+  const atual = prompt('Sua senha atual:'); if(atual === null) return;
+  const nova = prompt('Senha nova (4 dígitos ou mais):'); if(nova === null) return;
+  try{ await rpc('trocar_senha', { p_atual: atual, p_nova: nova }); toast('Senha trocada'); }
+  catch(e){ toast(e.message); }
+});
+
+/* ---------- histórico ---------- */
+function histLocal(id, linhas){
+  hist[id] = hist[id] || [];
+  const agora = new Date().toISOString();
+  linhas.forEach(l=>{
+    hist[id].push({ campo:l.campo, antes:l.valor_antes, depois:l.valor_depois,
+                    quem: eu ? eu.nome : '', quando: agora, local: true });
+  });
+  gravarHist();
+}
+function registrarMudancas(id, antes, depois){
+  const linhas = [];
+  Object.keys(ROTULO).forEach(c=>{
+    const a = (antes[c] || '').trim(), b = (depois[c] || '').trim();
+    if(a !== b) linhas.push({ des_id:id, campo:c, valor_antes:a, valor_depois:b });
+  });
+  if(!linhas.length) return;
+  histLocal(id, linhas);
+  histPend = histPend.concat(linhas);
+  gravarHistPend();
+}
+function qdo(iso){
+  if(!iso) return '';
+  const d = new Date(iso);
+  if(isNaN(d)) return '';
+  return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'}) + ' ' +
+         d.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+}
+const curto = v => { v = String(v || ''); return v.length > 44 ? v.slice(0,44) + '…' : v; };
+
+function caixaHistorico(id){
+  const lista = (hist[id] || []).slice().sort((a,b)=> String(b.quando).localeCompare(String(a.quando)));
+  if(!lista.length) return '<p class="hvazio">Nada registrado ainda. Toda alteração daqui para frente aparece aqui.</p>';
+  return lista.map(h=>{
+    const quem = h.quem ? esc(h.quem) : 'alguém';
+    const quando = qdo(h.quando);
+    if(h.campo === '__importado'){
+      const de = h.depois ? ' — trabalho de ' + esc(h.depois) : '';
+      return `<p><b>${quem}</b> importou esta ficha do backup${de} <i>· ${quando}</i></p>`;
+    }
+    const rot = ROTULO[h.campo] || h.campo;
+    const antes = h.antes ? '"' + esc(curto(h.antes)) + '"' : 'vazio';
+    const depois = h.depois ? '"' + esc(curto(h.depois)) + '"' : 'vazio';
+    return `<p><b>${quem}</b> mudou ${esc(rot)}: ${antes} → ${depois} <i>· ${quando}</i></p>`;
+  }).join('');
+}
+
+/* ---------- fila e sincronização ---------- */
 function linhaDe(id){
   const r = reg(id);
-  const linha = { des_id: id, sala_codigo: sala, alterado_por: quem || '' };
+  const linha = { des_id: id };
   Object.keys(COLS).forEach(k=>{ linha[COLS[k]] = r[k] || ''; });
-  linha.data_visita = r.dataVisita || null;      // date não aceita string vazia
+  linha.data_visita = r.dataVisita || null;
   return linha;
 }
 function daLinha(row){
   const r = {};
   Object.keys(COLS).forEach(k=>{ r[k] = row[COLS[k]] || ''; });
   r.updated = row.alterado_em ? new Date(row.alterado_em).toLocaleString('pt-BR') : '';
-  r.porQuem = row.alterado_por || '';
+  r.porQuem = row.alterado_por_nome || '';
   return r;
 }
-function cabecalhos(){
-  return { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY,
-           'x-sala': sala, 'Content-Type': 'application/json' };
-}
-
 function marcarPendente(id){
   if(!id) return;
-  if(ficha[id]){ ficha[id].porQuem = quem || ''; gravar(ficha); }
   if(!pend.includes(id)) pend.push(id);
   gravarPend(); pintarSync(); sincronizar(true);
 }
 
 function pintarSync(){
   const bar = el('syncBar'), txt = el('syncTxt'), btn = el('syncBtn');
+  const fila = pend.length + histPend.length;
   bar.classList.remove('ok','warn','err');
-  if(!sala){
-    txt.textContent = 'Só neste aparelho'; btn.textContent = 'Conectar';
+  if(!token){
+    txt.textContent = 'Fora da conta'; btn.textContent = 'Entrar';
   } else if(sincronizando){
     bar.classList.add('warn'); txt.textContent = 'Sincronizando…'; btn.textContent = 'Aguarde';
   } else if(falhou || !navigator.onLine){
     bar.classList.add('err');
-    txt.textContent = pend.length ? 'Sem sincronizar · ' + pend.length + ' na fila' : 'Sem sincronizar · salvo no aparelho';
+    txt.textContent = fila ? 'Sem sincronizar · ' + fila + ' na fila' : 'Sem sincronizar · salvo aqui';
     btn.textContent = 'Tentar';
-  } else if(pend.length){
-    bar.classList.add('warn'); txt.textContent = pend.length + ' para enviar'; btn.textContent = 'Enviar';
+  } else if(fila){
+    bar.classList.add('warn'); txt.textContent = fila + ' para enviar'; btn.textContent = 'Enviar';
   } else {
-    bar.classList.add('ok'); txt.textContent = 'Sincronizado · sala ' + sala; btn.textContent = 'Atualizar';
+    bar.classList.add('ok');
+    txt.textContent = eu ? 'Sincronizado · ' + eu.nome.split(' ')[0] : 'Sincronizado';
+    btn.textContent = 'Atualizar';
   }
-  const sub = el('mSalaSub');
-  if(sub) sub.textContent = sala ? 'Conectado à sala "' + sala + '"' : 'Não conectado — dados só neste aparelho';
 }
 
 async function sincronizar(silencioso){
-  if(!sala || sincronizando) return;
+  if(!token || sincronizando) return;
   if(!navigator.onLine){ falhou = true; pintarSync(); return; }
   sincronizando = true; pintarSync();
   try{
-    /* 1. sobe o que está na fila (o que foi anotado sem sinal) */
+    /* 1. sobe as fichas da fila */
     if(pend.length){
-      const resp = await fetch(SUPA_URL + '/rest/v1/fichas?on_conflict=sala_codigo,des_id', {
-        method: 'POST',
-        headers: Object.assign(cabecalhos(), { 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+      const resp = await fetch(SUPA_URL + '/rest/v1/fichas?on_conflict=des_id', {
+        method:'POST',
+        headers: Object.assign(cab(), { 'Prefer':'resolution=merge-duplicates,return=minimal' }),
         body: JSON.stringify(pend.map(linhaDe))
       });
+      if(resp.status === 401 || resp.status === 403) throw new Error('__sessao__');
       if(!resp.ok) throw new Error(await resp.text());
       pend = []; gravarPend();
     }
-    /* 2. baixa o que os outros mudaram */
-    const resp2 = await fetch(SUPA_URL + '/rest/v1/fichas?select=*&sala_codigo=eq.' + encodeURIComponent(sala), { headers: cabecalhos() });
-    if(!resp2.ok) throw new Error(await resp2.text());
-    const linhas = await resp2.json();
+    /* 2. sobe o histórico da fila */
+    if(histPend.length){
+      const resp = await fetch(SUPA_URL + '/rest/v1/historico', {
+        method:'POST',
+        headers: Object.assign(cab(), { 'Prefer':'return=minimal' }),
+        body: JSON.stringify(histPend)
+      });
+      if(resp.status === 401 || resp.status === 403) throw new Error('__sessao__');
+      if(!resp.ok) throw new Error(await resp.text());
+      histPend = []; gravarHistPend();
+    }
+    /* 3. baixa fichas */
+    const r2 = await fetch(SUPA_URL + '/rest/v1/fichas?select=*', { headers: cab() });
+    if(r2.status === 401 || r2.status === 403) throw new Error('__sessao__');
+    if(!r2.ok) throw new Error(await r2.text());
+    const linhas = await r2.json();
     let mudou = false;
     linhas.forEach(row=>{
-      if(pend.includes(row.des_id)) return;      // alteração local ainda não enviada tem preferência
-      ficha[row.des_id] = daLinha(row);
-      mudou = true;
+      if(pend.includes(row.des_id)) return;
+      ficha[row.des_id] = daLinha(row); mudou = true;
     });
     if(mudou){ gravar(ficha); render(); atualizarTopo(); }
+    /* 4. baixa histórico */
+    const r3 = await fetch(SUPA_URL + '/rest/v1/historico?select=des_id,campo,valor_antes,valor_depois,usuario_nome,quando&order=quando.desc&limit=3000', { headers: cab() });
+    if(r3.ok){
+      const hs = await r3.json();
+      const novo = {};
+      hs.forEach(h=>{
+        (novo[h.des_id] = novo[h.des_id] || []).push({
+          campo:h.campo, antes:h.valor_antes, depois:h.valor_depois,
+          quem:h.usuario_nome, quando:h.quando
+        });
+      });
+      histPend.forEach(l=>{                       // o que ainda não subiu continua à vista
+        (novo[l.des_id] = novo[l.des_id] || []).push({
+          campo:l.campo, antes:l.valor_antes, depois:l.valor_depois,
+          quem: eu ? eu.nome : '', quando: new Date().toISOString(), local:true
+        });
+      });
+      hist = novo; gravarHist();
+      if(abertoId && el('fHist')) el('fHist').innerHTML = caixaHistorico(abertoId);
+    }
     falhou = false;
   }catch(e){
-    falhou = true;
-    if(!silencioso) toast('Não consegui sincronizar agora — está salvo no aparelho');
+    if(e && e.message === '__sessao__'){
+      sairDaConta(true); mostrarLogin(true);
+      el('lErro').textContent = 'Sua sessão expirou. Entre de novo.';
+    } else {
+      falhou = true;
+      if(!silencioso) toast('Não consegui sincronizar agora — está salvo no aparelho');
+    }
   }
   sincronizando = false; pintarSync();
 }
 
-function abrirSala(){
-  el('iSalaCod').value = sala;
-  el('iQuemSou').value = quem;
-  el('menuSala').classList.add('open');
+el('syncBtn').addEventListener('click', ()=>{ if(!token) mostrarLogin(true); else sincronizar(); });
+
+/* ---------- administração de usuários ---------- */
+async function abrirUsuarios(){
+  el('menu').classList.remove('open');
+  el('menuUsuarios').classList.add('open');
+  el('uLista').innerHTML = '<div class="uitem"><div class="un"><span>Carregando…</span></div></div>';
+  try{
+    const lista = await rpc('admin_listar');
+    el('uLista').innerHTML = (lista || []).map(u=>`
+      <div class="uitem ${u.ativo?'':'off'}">
+        <div class="un">
+          <b>${esc(u.nome)}${u.papel==='admin'?' · admin':''}</b>
+          <span>${esc(u.email)}${u.ativo?'':' · desativado'}</span>
+        </div>
+        <button class="uacao" data-senha="${u.id}">Senha</button>
+        <button class="uacao" data-ativo="${u.id}" data-para="${u.ativo?'0':'1'}">${u.ativo?'Desativar':'Ativar'}</button>
+      </div>`).join('') || '<div class="uitem"><div class="un"><span>Ninguém cadastrado.</span></div></div>';
+  }catch(e){
+    el('uLista').innerHTML = '<div class="uitem"><div class="un"><span>' + esc(e.message) + '</span></div></div>';
+  }
 }
+el('mUsuarios').addEventListener('click', abrirUsuarios);
+document.querySelectorAll('[data-uclose]').forEach(b=>b.addEventListener('click', ()=>el('menuUsuarios').classList.remove('open')));
 
-el('syncBtn').addEventListener('click', ()=>{ if(!sala) abrirSala(); else sincronizar(); });
-el('mSala').addEventListener('click', ()=>{ el('menu').classList.remove('open'); abrirSala(); });
-document.querySelectorAll('[data-sclose]').forEach(b=>b.addEventListener('click', ()=>el('menuSala').classList.remove('open')));
-
-el('salaConectar').addEventListener('click', ()=>{
-  const codigo = el('iSalaCod').value.trim().toLowerCase();
-  if(!codigo){ toast('Digite o código da sala'); return; }
-  sala = codigo; quem = el('iQuemSou').value.trim();
-  lsSet(SALA_KEY, sala); lsSet(NOME_KEY, quem);
-  el('menuSala').classList.remove('open');
-  falhou = false; pintarSync(); sincronizar();
+el('uLista').addEventListener('click', async e=>{
+  const bs = e.target.closest('button[data-senha]');
+  const ba = e.target.closest('button[data-ativo]');
+  try{
+    if(bs){
+      const nova = prompt('Senha nova para esta pessoa (4 dígitos ou mais):');
+      if(nova === null || !nova.trim()) return;
+      await rpc('admin_redefinir_senha', { p_usuario: bs.dataset.senha, p_nova: nova.trim() });
+      toast('Senha redefinida — avise a pessoa');
+    } else if(ba){
+      await rpc('admin_ativar', { p_usuario: ba.dataset.ativo, p_ativo: ba.dataset.para === '1' });
+      abrirUsuarios();
+    }
+  }catch(err){ toast(err.message); }
 });
 
-el('salaEnviarTudo').addEventListener('click', ()=>{
-  if(!sala){ toast('Conecte a uma sala primeiro'); return; }
-  Object.keys(ficha).filter(preenchido).forEach(id=>{ if(!pend.includes(id)) pend.push(id); });
-  gravarPend(); el('menuSala').classList.remove('open');
-  toast(pend.length ? pend.length + ' ficha(s) na fila de envio' : 'Nada preenchido para enviar');
-  pintarSync(); sincronizar();
+el('uCriar').addEventListener('click', async ()=>{
+  const nome = el('uNome').value.trim(), email = el('uEmail').value.trim(), senha = el('uSenha').value.trim();
+  if(!nome || !email || !senha){ toast('Preencha nome, e-mail e senha'); return; }
+  try{
+    await rpc('admin_criar', { p_nome: nome, p_email: email, p_senha: senha, p_papel: 'equipe' });
+    el('uNome').value = el('uEmail').value = el('uSenha').value = '';
+    toast('Usuário criado — passe a senha para a pessoa');
+    abrirUsuarios();
+  }catch(e){
+    toast(e.message.indexOf('duplicate') >= 0 ? 'Esse e-mail já está cadastrado' : e.message);
+  }
 });
 
-el('salaSair').addEventListener('click', ()=>{
-  if(!confirm('Desconectar deste aparelho? As fichas continuam salvas aqui, mas param de sincronizar.')) return;
-  sala = ''; lsDel(SALA_KEY);
-  el('menuSala').classList.remove('open'); pintarSync();
-});
-
+/* ---------- partida ---------- */
 window.addEventListener('online', ()=>{ falhou = false; pintarSync(); sincronizar(true); });
 window.addEventListener('offline', ()=>{ falhou = true; pintarSync(); });
 document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) sincronizar(true); });
 
+aplicarPapel();
 pintarSync();
-if(sala) sincronizar(true);
+if(token) sincronizar(true); else mostrarLogin(true);
 </script>
 </body>
 </html>
