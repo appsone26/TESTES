@@ -16,7 +16,7 @@
   --no:#8A3040; --no-soft:#F7E5E8;
   --head-1:#1B3A5F; --head-2:#2E6FA3;   /* marinho -> mar */
   --head-fg:#FFFFFF; --field:#F5F9FC;
-  --fora:#C9D8E7;
+  --fora:#AFC4D8;
   --r:12px;
   --fs:15px;
   color-scheme:light;
@@ -31,7 +31,7 @@
   --no:#E28797; --no-soft:#3A1F26;
   --head-1:#132C47; --head-2:#22557F;
   --head-fg:#EAF3FB; --field:#0C1B2C;
-  --fora:#040B14;
+  --fora:#01060B;
   color-scheme:dark;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -51,8 +51,13 @@ body{
   background:var(--paper); overflow:hidden; position:relative;
 }
 @media (min-width:860px){
-  body{padding:20px 0}
-  .shell{height:calc(100dvh - 40px);border-radius:18px;box-shadow:0 22px 60px rgba(4,12,22,.38)}
+  body{padding:22px 0}
+  .shell{
+    height:calc(100dvh - 44px);
+    border:1px solid var(--line);
+    border-radius:18px;
+    box-shadow:0 0 0 1px rgba(255,255,255,.04), 0 24px 64px rgba(2,8,16,.5);
+  }
 }
 button,input,select,textarea{font:inherit;color:inherit}
 a{color:var(--brand)}
@@ -109,10 +114,12 @@ header{
 .count button{background:none;border:0;color:var(--brand);font-size:12px;text-decoration:underline;padding:0}
 
 /* ---------- lista ---------- */
-main{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px 12px 18px}
+main{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:12px 12px 18px;background:var(--paper)}
 .listaWrap{position:relative;flex:1;min-height:0;display:flex;flex-direction:column}
-main::-webkit-scrollbar{width:9px}
-main::-webkit-scrollbar-thumb{background:var(--line);border-radius:9px}
+main{scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+main::-webkit-scrollbar{width:10px}
+main::-webkit-scrollbar-track{background:transparent}
+main::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;border:3px solid var(--paper);background-clip:padding-box}
 
 /* puxar para atualizar */
 .puxe{position:absolute;left:0;right:0;top:8px;z-index:5;display:flex;justify-content:center;pointer-events:none;
