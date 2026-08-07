@@ -440,6 +440,7 @@ textarea{min-height:84px;resize:vertical}
     <button data-pr="roteiro">Roteiro de visita<br><small>Lista por câmara, com quadradinho para marcar à mão</small></button>
     <button data-pr="fichas">Fichas individuais<br><small>Uma ficha por desembargador, com linhas para escrever</small></button>
     <button data-pr="falta">Falta visitar<br><small>Só quem ainda não foi visitado, com o que já se sabe do gabinete</small></button>
+    <button data-pr="agendados">Visitas agendadas<br><small>Só o que está marcado, em ordem de data</small></button>
     <button data-pr="feito">Relatório do que já foi feito<br><small>Só os visitados, com data e quem foi</small></button>
   </div>
 </div>
@@ -845,6 +846,62 @@ function imprimirFalta(res){
   return cabecalhoImpressao('Falta visitar — Desembargadores TJRJ', descricaoFiltro(), pendentes.length) + corpo + nota + rodapeImpressao();
 }
 
+function imprimirAgendados(res){
+  const marcados = res.filter(d=>reg(d.id).status === 'Agendado');
+  if(!marcados.length){
+    return cabecalhoImpressao('Visitas agendadas — Desembargadores TJRJ', descricaoFiltro(), 0) +
+           '<p class="pr-linha pr-vazio">Nenhuma visita agendada nesta seleção.</p>' + rodapeImpressao();
+  }
+  /* com data marcada vêm primeiro, em ordem cronológica; sem data ficam no fim */
+  const comData = marcados.filter(d=>reg(d.id).dataVisita)
+    .sort((a,b)=>reg(a.id).dataVisita.localeCompare(reg(b.id).dataVisita));
+  const semData = marcados.filter(d=>!reg(d.id).dataVisita)
+    .sort((a,b)=>a.nome.localeCompare(b.nome,'pt'));
+
+  const item = d=>{
+    const r = reg(d.id);
+    const contato = [r.email || (d.emails||[])[0] || '', r.telefone || (d.tels||[])[0] || ''].filter(Boolean).join(' · ');
+    return `<div class="pr-item">
+      <div class="pr-box"></div>
+      <div class="pr-body">
+        <div class="pr-nome">${esc(d.nome)}<span>${esc(d.camara)}${r.sala?' · Sala '+esc(r.sala):''}</span></div>
+        <div class="pr-linha"><b>Horário:</b> ${ouVazio(r.dias || d.presencial || '', 'a confirmar')}</div>
+        ${r.agendamento?`<div class="pr-linha"><b>Combinado:</b> ${esc(r.agendamento)}</div>`:''}
+        <div class="pr-linha"><b>Contato:</b> ${ouVazio(contato, 'a levantar')}</div>
+        ${r.notas?`<div class="pr-linha"><b>Anotações:</b> ${esc(r.notas)}</div>`:''}
+        <div class="pr-rule"></div>
+      </div>
+    </div>`;
+  };
+
+  let corpo = '';
+  let diaAtual = '';
+  comData.forEach(d=>{
+    const dia = reg(d.id).dataVisita;
+    if(dia !== diaAtual){
+      diaAtual = dia;
+      const quantos = comData.filter(x=>reg(x.id).dataVisita === dia).length;
+      corpo += `<div class="pr-cam">${esc(diaPorExtenso(dia))} — ${quantos} ${quantos===1?'visita':'visitas'}</div>`;
+    }
+    corpo += item(d);
+  });
+  if(semData.length){
+    corpo += `<div class="pr-cam">Sem data marcada — ${semData.length} ${semData.length===1?'visita':'visitas'}</div>`;
+    corpo += semData.map(item).join('');
+  }
+  return cabecalhoImpressao('Visitas agendadas — Desembargadores TJRJ', descricaoFiltro(), marcados.length) + corpo + rodapeImpressao();
+}
+
+function diaPorExtenso(iso){
+  if(!iso) return 'Sem data';
+  const p = iso.split('-');
+  if(p.length !== 3) return iso;
+  const d = new Date(+p[0], +p[1]-1, +p[2]);
+  if(isNaN(d)) return iso;
+  const s = d.toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' });
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function imprimirFeito(res){
   const feitos = res.filter(d=>reg(d.id).status==='Visitado')
     .sort((a,b)=>(reg(b.id).dataVisita||'').localeCompare(reg(a.id).dataVisita||''));
@@ -868,7 +925,8 @@ function imprimirFeito(res){
 
 function imprimir(tipo){
   const res = filtrar();
-  const html = tipo==='fichas' ? imprimirFichas(res) : tipo==='falta' ? imprimirFalta(res) : tipo==='feito' ? imprimirFeito(res) : imprimirRoteiro(res);
+  const html = tipo==='fichas' ? imprimirFichas(res) : tipo==='falta' ? imprimirFalta(res)
+    : tipo==='agendados' ? imprimirAgendados(res) : tipo==='feito' ? imprimirFeito(res) : imprimirRoteiro(res);
   el('printArea').innerHTML = html;
   el('menuPdf').classList.remove('open');
   setTimeout(()=>window.print(), 120);
