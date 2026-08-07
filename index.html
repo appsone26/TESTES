@@ -90,12 +90,12 @@ header{
 .filters{flex:none;background:var(--card);border-bottom:1px solid var(--line);padding:10px 12px;z-index:20}
 .search{position:relative}
 .search input{
-  width:100%;padding:11px 38px 11px 46px;border:1px solid var(--line);border-radius:10px;
+  width:100%;padding:11px 42px 11px 14px;border:1px solid var(--line);border-radius:10px;
   background:var(--field);outline:none;
 }
 .search input:focus{border-color:var(--brand);background:var(--card);box-shadow:0 0 0 3px var(--brand-soft)}
-.search .ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:19px;height:19px;color:var(--ink-3);opacity:.85;pointer-events:none}
-.search .clr{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--ink-3);padding:6px 8px;font-size:16px;display:none}
+.search .ico{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:19px;height:19px;color:var(--ink-3);opacity:.8;pointer-events:none}
+.search .clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--ink-3);padding:6px 8px;font-size:16px;display:none}
 .chips{display:flex;gap:6px;overflow-x:auto;margin-top:9px;padding-bottom:2px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
 .chip{
@@ -368,7 +368,7 @@ textarea{min-height:84px;resize:vertical}
 
 <div class="filters">
   <div class="search">
-    <svg class="ico" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.6" cy="8.6" r="5.6" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12.8 12.8L17.4 17.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+    <svg class="ico" id="icoQ" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.6" cy="8.6" r="5.6" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12.8 12.8L17.4 17.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
     <input id="q" type="text" inputmode="search" placeholder="Buscar desembargador, câmara, e-mail…" autocomplete="off">
     <button class="clr" id="clrQ" aria-label="Limpar busca">✕</button>
   </div>
@@ -903,8 +903,13 @@ el('temaBtn').addEventListener('click', ()=>{
 });
 
 /* ---------- eventos ---------- */
-el('q').addEventListener('input', e=>{ f.q = e.target.value; el('clrQ').style.display = f.q?'block':'none'; render(); });
-el('clrQ').addEventListener('click', ()=>{ el('q').value=''; f.q=''; el('clrQ').style.display='none'; render(); });
+function pintarBusca(){
+  const tem = !!f.q;
+  el('clrQ').style.display = tem ? 'block' : 'none';
+  el('icoQ').style.display = tem ? 'none' : 'block';
+}
+el('q').addEventListener('input', e=>{ f.q = e.target.value; pintarBusca(); render(); });
+el('clrQ').addEventListener('click', ()=>{ el('q').value=''; f.q=''; pintarBusca(); render(); });
 el('chipsStatus').addEventListener('click', e=>{
   const b = e.target.closest('.chip'); if(!b) return;
   el('chipsStatus').querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed','false'));
@@ -915,7 +920,7 @@ el('fCamara').addEventListener('change', e=>{ f.camara = e.target.value; render(
 el('fCanal').addEventListener('change', e=>{ f.canal = e.target.value; render(); });
 el('limpar').addEventListener('click', ()=>{
   f.q=f.status=f.secao=f.camara=f.canal='';
-  el('q').value=''; el('clrQ').style.display='none';
+  el('q').value=''; pintarBusca();
   el('fSecao').value=''; el('fCanal').value='';
   el('chipsStatus').querySelectorAll('.chip').forEach((x,i)=>x.setAttribute('aria-pressed', i===0?'true':'false'));
   atualizarCamaras(); render();
