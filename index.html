@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#16202E">
+<meta name="theme-color" content="#1B3A5F">
 <title>Despachos TJRJ — Visitação</title>
 <style>
 :root{
@@ -14,7 +14,7 @@
   --pend:#96590A; --pend-soft:#FAEDD6;
   --sched:#5B4AA8; --sched-soft:#E9E7F8;
   --no:#8A3040; --no-soft:#F7E5E8;
-  --head-1:#0C2340; --head-2:#175A85;   /* marinho -> mar */
+  --head-1:#1B3A5F; --head-2:#2E6FA3;   /* marinho -> mar */
   --head-fg:#FFFFFF; --field:#F5F9FC;
   --r:12px;
   --fs:15px;
@@ -28,7 +28,7 @@
   --pend:#E0A651; --pend-soft:#3A2C13;
   --sched:#A99BEA; --sched-soft:#25214A;
   --no:#E28797; --no-soft:#3A1F26;
-  --head-1:#071426; --head-2:#0F3B5C;
+  --head-1:#132C47; --head-2:#22557F;
   --head-fg:#EAF3FB; --field:#0C1B2C;
   color-scheme:dark;
 }
@@ -187,6 +187,19 @@ textarea{min-height:84px;resize:vertical}
 .mcard button small{display:block;font-size:11.5px;color:var(--ink-3);font-weight:400;margin-top:2px;line-height:1.3}
 .mcard .warn{color:var(--no)}
 .mnote{padding:11px 14px;font-size:12px;color:var(--ink-3);background:var(--field);border-bottom:1px solid var(--line)}
+.mcard .campo{padding:10px 14px;border-bottom:1px solid var(--line)}
+.mcard .campo label{display:block;font-size:11.5px;color:var(--ink-3);margin-bottom:5px}
+.mcard .campo input{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink);font-size:15px}
+.mcard .ok{color:var(--ok);font-weight:600}
+
+/* ---------- sincronização ---------- */
+.sync{display:flex;align-items:center;gap:7px;padding:0 14px 9px;font-size:11.5px;color:var(--head-fg);opacity:.92}
+.sync .dot{width:7px;height:7px;border-radius:50%;background:#93A9BF;flex:none}
+.sync.ok .dot{background:#59D999}
+.sync.warn .dot{background:#F2B84B}
+.sync.err .dot{background:#F08A9B}
+.sync .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sync button{margin-left:auto;flex:none;background:rgba(255,255,255,.17);color:var(--head-fg);border:0;border-radius:7px;padding:4px 11px;font-size:11.5px;font-weight:600}
 
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--head-1);color:#fff;border:1px solid var(--head-2);padding:11px 18px;border-radius:10px;font-size:13.5px;font-weight:600;opacity:0;transition:.22s;z-index:90;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
@@ -249,6 +262,7 @@ textarea{min-height:84px;resize:vertical}
     <button class="hbtn tema" id="temaBtn" aria-label="Alternar tema claro e escuro">◐</button>
     <button class="hbtn" id="menuBtn" aria-label="Menu">⋮</button>
   </div>
+  <div class="sync" id="syncBar"><span class="dot"></span><span class="txt" id="syncTxt">Só neste aparelho</span><button id="syncBtn">Conectar</button></div>
   <div class="bars">
     <div class="stat"><b id="stVis">0</b><span>Visitados</span></div>
     <div class="stat"><b id="stAge">0</b><span>Agendados</span></div>
@@ -304,11 +318,11 @@ textarea{min-height:84px;resize:vertical}
   <div class="backdrop" data-mclose></div>
   <div class="mcard">
     <div class="mnote" id="mnote"></div>
+    <button id="mSala">Sala compartilhada<br><small id="mSalaSub">Não conectado</small></button>
     <button id="mPrint">Imprimir / salvar em PDF</button>
     <button id="mExport">Baixar backup (.json)</button>
     <button id="mExportCsv">Exportar planilha (.csv)</button>
     <button id="mImport">Restaurar backup</button>
-    <button id="mReset" class="warn">Apagar tudo que preenchi</button>
   </div>
 </div>
 <div class="menu" id="menuPdf">
@@ -317,7 +331,25 @@ textarea{min-height:84px;resize:vertical}
     <div class="mnote" id="pnote"></div>
     <button data-pr="roteiro">Roteiro de visita<br><small>Lista por câmara, com quadradinho para marcar à mão</small></button>
     <button data-pr="fichas">Fichas individuais<br><small>Uma ficha por desembargador, com linhas para escrever</small></button>
+    <button data-pr="falta">Falta visitar<br><small>Só quem ainda não foi visitado, com o que já se sabe do gabinete</small></button>
     <button data-pr="feito">Relatório do que já foi feito<br><small>Só os visitados, com data e quem foi</small></button>
+  </div>
+</div>
+<div class="menu" id="menuSala">
+  <div class="backdrop" data-sclose></div>
+  <div class="mcard">
+    <div class="mnote">O código é combinado com a equipe e digitado uma vez. Quem tem o link mas não tem o código não enxerga nada.</div>
+    <div class="campo">
+      <label for="iSalaCod">Código da sala</label>
+      <input type="text" id="iSalaCod" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="Ex.: quinto2026">
+    </div>
+    <div class="campo">
+      <label for="iQuemSou">Seu nome (aparece em "alterado por")</label>
+      <input type="text" id="iQuemSou" autocomplete="off" placeholder="Ex.: Edgard">
+    </div>
+    <button id="salaConectar" class="ok">Conectar e sincronizar</button>
+    <button id="salaEnviarTudo">Enviar para a sala o que já está neste aparelho<br><small>Use uma vez, se você preencheu fichas antes de conectar</small></button>
+    <button id="salaSair" class="warn">Desconectar deste aparelho<br><small>As fichas continuam aqui, mas param de sincronizar</small></button>
   </div>
 </div>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
@@ -349,7 +381,7 @@ function reg(id){
     status: r.status || 'A visitar', canal: r.canal || '', dias: r.dias || '',
     agendamento: r.agendamento || '', email: r.email || '', telefone: r.telefone || '',
     sala: r.sala || '', dataVisita: r.dataVisita || '', quemVisitou: r.quemVisitou || '',
-    notas: r.notas || '', updated: r.updated || ''
+    notas: r.notas || '', updated: r.updated || '', porQuem: r.porQuem || ''
   };
 }
 const preenchido = id => {
@@ -543,7 +575,7 @@ function abrir(id){
     <div class="block">
       <h3>Anotações da visita</h3>
       <textarea id="iNotas" placeholder="O que ele falou, como recebeu, o que levar da próxima vez…">${esc(r.notas)}</textarea>
-      ${r.updated?`<p class="orig" style="margin-top:10px"><b>Última alteração</b>${esc(r.updated)}</p>`:''}
+      ${r.updated?`<p class="orig" style="margin-top:10px"><b>Última alteração</b>${esc(r.updated)}${r.porQuem?' — por '+esc(r.porQuem):''}</p>`:''}
     </div>`;
 
   el('fBody').querySelectorAll('.seg').forEach(seg=>{
@@ -580,10 +612,12 @@ function salvar(){
     notas: el('iNotas').value.trim(),
     updated: new Date().toLocaleString('pt-BR')
   };
+  const idSalvo = abertoId;
   ficha[abertoId] = r;
   const ok = gravar(ficha);
   fechar(); render(); atualizarTopo();
   toast(ok ? 'Ficha salva' : 'Salvo só nesta sessão');
+  marcarPendente(idSalvo);
 }
 
 
@@ -655,6 +689,39 @@ function imprimirFichas(res){
   return cabecalhoImpressao('Fichas de visitação — Desembargadores TJRJ', descricaoFiltro(), res.length) + corpo + rodapeImpressao();
 }
 
+function imprimirFalta(res){
+  const pendentes = res.filter(d=>{ const s = reg(d.id).status; return s !== 'Visitado' && s !== 'Não recebe'; });
+  const naoRecebe = res.filter(d=>reg(d.id).status === 'Não recebe').length;
+  if(!pendentes.length){
+    return cabecalhoImpressao('Falta visitar — Desembargadores TJRJ', descricaoFiltro(), 0) +
+           '<p class="pr-linha pr-vazio">Todos os desembargadores desta seleção já foram visitados.</p>' + rodapeImpressao();
+  }
+  const grupos = {};
+  pendentes.forEach(d=>{ (grupos[d.camara] = grupos[d.camara] || []).push(d); });
+  const ordem = Object.keys(grupos).sort((a,b)=>((parseInt(a)||99)-(parseInt(b)||99)) || a.localeCompare(b,'pt'));
+  const corpo = ordem.map(cam=>{
+    const itens = grupos[cam].map(d=>{
+      const r = reg(d.id);
+      const horario = r.dias || d.presencial || '';
+      const agenda = r.agendamento || d.video || '';
+      const contato = [r.email || (d.emails||[])[0] || '', r.telefone || (d.tels||[])[0] || ''].filter(Boolean).join(' · ');
+      return `<div class="pr-item">
+        <div class="pr-box"></div>
+        <div class="pr-body">
+          <div class="pr-nome">${esc(d.nome)}<span>${esc(canalDe(d))}${r.status==='Agendado'?' · Agendado':''}</span></div>
+          <div class="pr-linha"><b>Quando:</b> ${ouVazio(horario, 'a confirmar')}</div>
+          ${agenda?`<div class="pr-linha"><b>Como:</b> ${esc(agenda)}</div>`:''}
+          <div class="pr-linha"><b>Contato:</b> ${ouVazio(contato, 'a levantar')}${r.sala?' · Sala '+esc(r.sala):''}</div>
+          <div class="pr-rule"></div>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="pr-cam">${esc(cam)} — faltam ${grupos[cam].length} de ${res.filter(d=>d.camara===cam).length}</div>${itens}`;
+  }).join('');
+  const nota = naoRecebe ? `<p class="pr-linha pr-vazio">${naoRecebe} ${naoRecebe===1?'desembargador marcado como "Não recebe" ficou de fora':'desembargadores marcados como "Não recebe" ficaram de fora'} desta lista.</p>` : '';
+  return cabecalhoImpressao('Falta visitar — Desembargadores TJRJ', descricaoFiltro(), pendentes.length) + corpo + nota + rodapeImpressao();
+}
+
 function imprimirFeito(res){
   const feitos = res.filter(d=>reg(d.id).status==='Visitado')
     .sort((a,b)=>(reg(b.id).dataVisita||'').localeCompare(reg(a.id).dataVisita||''));
@@ -678,7 +745,7 @@ function imprimirFeito(res){
 
 function imprimir(tipo){
   const res = filtrar();
-  const html = tipo==='fichas' ? imprimirFichas(res) : tipo==='feito' ? imprimirFeito(res) : imprimirRoteiro(res);
+  const html = tipo==='fichas' ? imprimirFichas(res) : tipo==='falta' ? imprimirFalta(res) : tipo==='feito' ? imprimirFeito(res) : imprimirRoteiro(res);
   el('printArea').innerHTML = html;
   el('menuPdf').classList.remove('open');
   setTimeout(()=>window.print(), 120);
@@ -702,7 +769,7 @@ function pintarTema(t){
   el('temaBtn').textContent = t === 'escuro' ? '☀' : '☾';
   el('temaBtn').setAttribute('aria-label', t === 'escuro' ? 'Mudar para tema claro' : 'Mudar para tema escuro');
   const meta = document.querySelector('meta[name=theme-color]');
-  if(meta) meta.setAttribute('content', t === 'escuro' ? '#071426' : '#0C2340');
+  if(meta) meta.setAttribute('content', t === 'escuro' ? '#132C47' : '#1B3A5F');
 }
 pintarTema(document.documentElement.getAttribute('data-tema') || 'claro');
 el('temaBtn').addEventListener('click', ()=>{
@@ -732,7 +799,7 @@ el('limpar').addEventListener('click', ()=>{
 el('lista').addEventListener('click', e=>{ const c = e.target.closest('.card'); if(c) abrir(c.dataset.id); });
 el('salvar').addEventListener('click', salvar);
 document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', fechar));
-document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ fechar(); el('menu').classList.remove('open'); el('menuPdf').classList.remove('open'); } });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ fechar(); el('menu').classList.remove('open'); el('menuPdf').classList.remove('open'); el('menuSala').classList.remove('open'); } });
 
 /* ---------- menu / backup ---------- */
 el('menuBtn').addEventListener('click', ()=>{
@@ -782,13 +849,149 @@ el('fileIn').addEventListener('change', e=>{
   };
   fr.readAsText(arq);
 });
-el('mReset').addEventListener('click', ()=>{
-  if(!confirm('Apagar todas as fichas preenchidas? Isso não dá para desfazer.')) return;
-  ficha = {}; gravar(ficha); render(); atualizarTopo();
-  el('menu').classList.remove('open'); toast('Fichas apagadas');
-});
 
 render(); atualizarTopo();
+
+/* ---------- sala compartilhada (Supabase) ---------- */
+const SUPA_URL = 'https://atbljrjlsitzxwvypcqj.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0Ymxqcmpsc2l0enh3dnlwY3FqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwNjE1ODIsImV4cCI6MjEwMTYzNzU4Mn0.h5QaIhMcI-c0LGL3gYRQZoHepkR7Qtytl9maPiUzeRo';
+const SALA_KEY = 'tjrj_sala', NOME_KEY = 'tjrj_nome', PEND_KEY = 'tjrj_pend';
+
+const lsGet = k => { try{ return localStorage.getItem(k) || ''; }catch(e){ return ''; } };
+const lsSet = (k,v) => { try{ localStorage.setItem(k,v); }catch(e){} };
+const lsDel = k => { try{ localStorage.removeItem(k); }catch(e){} };
+
+let sala = lsGet(SALA_KEY), quem = lsGet(NOME_KEY);
+let pend = [];
+try{ pend = JSON.parse(lsGet(PEND_KEY) || '[]'); if(!Array.isArray(pend)) pend = []; }catch(e){ pend = []; }
+let sincronizando = false, falhou = false;
+
+function gravarPend(){ lsSet(PEND_KEY, JSON.stringify(pend)); }
+
+/* nome do campo aqui  ->  nome da coluna no banco */
+const COLS = { status:'status', canal:'canal', dias:'dias', agendamento:'agendamento',
+  email:'email', telefone:'telefone', sala:'sala', dataVisita:'data_visita',
+  quemVisitou:'quem_visitou', notas:'notas' };
+
+function linhaDe(id){
+  const r = reg(id);
+  const linha = { des_id: id, sala_codigo: sala, alterado_por: quem || '' };
+  Object.keys(COLS).forEach(k=>{ linha[COLS[k]] = r[k] || ''; });
+  linha.data_visita = r.dataVisita || null;      // date não aceita string vazia
+  return linha;
+}
+function daLinha(row){
+  const r = {};
+  Object.keys(COLS).forEach(k=>{ r[k] = row[COLS[k]] || ''; });
+  r.updated = row.alterado_em ? new Date(row.alterado_em).toLocaleString('pt-BR') : '';
+  r.porQuem = row.alterado_por || '';
+  return r;
+}
+function cabecalhos(){
+  return { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY,
+           'x-sala': sala, 'Content-Type': 'application/json' };
+}
+
+function marcarPendente(id){
+  if(!id) return;
+  if(ficha[id]){ ficha[id].porQuem = quem || ''; gravar(ficha); }
+  if(!pend.includes(id)) pend.push(id);
+  gravarPend(); pintarSync(); sincronizar(true);
+}
+
+function pintarSync(){
+  const bar = el('syncBar'), txt = el('syncTxt'), btn = el('syncBtn');
+  bar.classList.remove('ok','warn','err');
+  if(!sala){
+    txt.textContent = 'Só neste aparelho'; btn.textContent = 'Conectar';
+  } else if(sincronizando){
+    bar.classList.add('warn'); txt.textContent = 'Sincronizando…'; btn.textContent = 'Aguarde';
+  } else if(falhou || !navigator.onLine){
+    bar.classList.add('err');
+    txt.textContent = pend.length ? 'Sem sincronizar · ' + pend.length + ' na fila' : 'Sem sincronizar · salvo no aparelho';
+    btn.textContent = 'Tentar';
+  } else if(pend.length){
+    bar.classList.add('warn'); txt.textContent = pend.length + ' para enviar'; btn.textContent = 'Enviar';
+  } else {
+    bar.classList.add('ok'); txt.textContent = 'Sincronizado · sala ' + sala; btn.textContent = 'Atualizar';
+  }
+  const sub = el('mSalaSub');
+  if(sub) sub.textContent = sala ? 'Conectado à sala "' + sala + '"' : 'Não conectado — dados só neste aparelho';
+}
+
+async function sincronizar(silencioso){
+  if(!sala || sincronizando) return;
+  if(!navigator.onLine){ falhou = true; pintarSync(); return; }
+  sincronizando = true; pintarSync();
+  try{
+    /* 1. sobe o que está na fila (o que foi anotado sem sinal) */
+    if(pend.length){
+      const resp = await fetch(SUPA_URL + '/rest/v1/fichas?on_conflict=sala_codigo,des_id', {
+        method: 'POST',
+        headers: Object.assign(cabecalhos(), { 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+        body: JSON.stringify(pend.map(linhaDe))
+      });
+      if(!resp.ok) throw new Error(await resp.text());
+      pend = []; gravarPend();
+    }
+    /* 2. baixa o que os outros mudaram */
+    const resp2 = await fetch(SUPA_URL + '/rest/v1/fichas?select=*&sala_codigo=eq.' + encodeURIComponent(sala), { headers: cabecalhos() });
+    if(!resp2.ok) throw new Error(await resp2.text());
+    const linhas = await resp2.json();
+    let mudou = false;
+    linhas.forEach(row=>{
+      if(pend.includes(row.des_id)) return;      // alteração local ainda não enviada tem preferência
+      ficha[row.des_id] = daLinha(row);
+      mudou = true;
+    });
+    if(mudou){ gravar(ficha); render(); atualizarTopo(); }
+    falhou = false;
+  }catch(e){
+    falhou = true;
+    if(!silencioso) toast('Não consegui sincronizar agora — está salvo no aparelho');
+  }
+  sincronizando = false; pintarSync();
+}
+
+function abrirSala(){
+  el('iSalaCod').value = sala;
+  el('iQuemSou').value = quem;
+  el('menuSala').classList.add('open');
+}
+
+el('syncBtn').addEventListener('click', ()=>{ if(!sala) abrirSala(); else sincronizar(); });
+el('mSala').addEventListener('click', ()=>{ el('menu').classList.remove('open'); abrirSala(); });
+document.querySelectorAll('[data-sclose]').forEach(b=>b.addEventListener('click', ()=>el('menuSala').classList.remove('open')));
+
+el('salaConectar').addEventListener('click', ()=>{
+  const codigo = el('iSalaCod').value.trim().toLowerCase();
+  if(!codigo){ toast('Digite o código da sala'); return; }
+  sala = codigo; quem = el('iQuemSou').value.trim();
+  lsSet(SALA_KEY, sala); lsSet(NOME_KEY, quem);
+  el('menuSala').classList.remove('open');
+  falhou = false; pintarSync(); sincronizar();
+});
+
+el('salaEnviarTudo').addEventListener('click', ()=>{
+  if(!sala){ toast('Conecte a uma sala primeiro'); return; }
+  Object.keys(ficha).filter(preenchido).forEach(id=>{ if(!pend.includes(id)) pend.push(id); });
+  gravarPend(); el('menuSala').classList.remove('open');
+  toast(pend.length ? pend.length + ' ficha(s) na fila de envio' : 'Nada preenchido para enviar');
+  pintarSync(); sincronizar();
+});
+
+el('salaSair').addEventListener('click', ()=>{
+  if(!confirm('Desconectar deste aparelho? As fichas continuam salvas aqui, mas param de sincronizar.')) return;
+  sala = ''; lsDel(SALA_KEY);
+  el('menuSala').classList.remove('open'); pintarSync();
+});
+
+window.addEventListener('online', ()=>{ falhou = false; pintarSync(); sincronizar(true); });
+window.addEventListener('offline', ()=>{ falhou = true; pintarSync(); });
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) sincronizar(true); });
+
+pintarSync();
+if(sala) sincronizar(true);
 </script>
 </body>
 </html>
