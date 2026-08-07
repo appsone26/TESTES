@@ -184,11 +184,47 @@ textarea{min-height:84px;resize:vertical}
 .mcard{position:absolute;right:10px;top:calc(56px + env(safe-area-inset-top));background:var(--card);border:1px solid var(--line);border-radius:var(--r);width:min(300px,calc(100% - 20px));box-shadow:0 14px 34px rgba(6,17,30,.4);overflow:hidden}
 .mcard button{display:block;width:100%;text-align:left;background:none;border:0;padding:13px 14px;border-bottom:1px solid var(--line);font-size:14.5px}
 .mcard button:last-child{border-bottom:0}
+.mcard button small{display:block;font-size:11.5px;color:var(--ink-3);font-weight:400;margin-top:2px;line-height:1.3}
 .mcard .warn{color:var(--no)}
 .mnote{padding:11px 14px;font-size:12px;color:var(--ink-3);background:var(--field);border-bottom:1px solid var(--line)}
 
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--head-1);color:#fff;border:1px solid var(--head-2);padding:11px 18px;border-radius:10px;font-size:13.5px;font-weight:600;opacity:0;transition:.22s;z-index:90;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- impressão / PDF ---------- */
+#printArea{display:none}
+@media print{
+  @page{ size:A4; margin:14mm 12mm; }
+  html,body{background:#fff!important;color:#000!important}
+  body{max-width:none;margin:0;padding:0;font-size:10.5pt}
+  header,.filters,main,.sheet,.menu,.toast{display:none!important}
+  #printArea{display:block!important}
+  .pr-head{border-bottom:2.5pt solid #0C2340;padding-bottom:6pt;margin-bottom:12pt}
+  .pr-head h1{margin:0;font-size:15pt;letter-spacing:.02em;color:#0C2340}
+  .pr-head p{margin:3pt 0 0;font-size:9pt;color:#444}
+  .pr-cam{font-size:10.5pt;font-weight:700;color:#0C2340;border-bottom:.8pt solid #0C2340;
+          padding-bottom:2pt;margin:14pt 0 5pt;page-break-after:avoid}
+  .pr-cam:first-of-type{margin-top:0}
+  .pr-item{display:flex;gap:7pt;padding:5pt 0;border-bottom:.4pt dotted #999;page-break-inside:avoid}
+  .pr-box{flex:0 0 auto;width:11pt;height:11pt;border:1pt solid #333;margin-top:1.5pt;border-radius:1.5pt}
+  .pr-box.on{background:#0C2340;border-color:#0C2340;position:relative}
+  .pr-box.on::after{content:"✓";position:absolute;inset:0;color:#fff;font-size:8pt;line-height:11pt;text-align:center}
+  .pr-body{flex:1}
+  .pr-nome{font-weight:700;font-size:11pt}
+  .pr-nome span{font-weight:400;font-size:8.5pt;color:#555;margin-left:5pt;text-transform:uppercase;letter-spacing:.05em}
+  .pr-linha{font-size:9.5pt;margin-top:1.5pt;color:#222}
+  .pr-linha b{color:#0C2340}
+  .pr-vazio{color:#888;font-style:italic}
+  .pr-rule{border-bottom:.5pt solid #bbb;height:11pt;margin-top:4pt}
+  .pr-ficha{page-break-inside:avoid;border:1pt solid #0C2340;border-radius:3pt;padding:9pt;margin-bottom:10pt}
+  .pr-ficha h2{margin:0 0 2pt;font-size:13pt;color:#0C2340}
+  .pr-ficha .sub{font-size:9pt;color:#555;margin:0 0 7pt}
+  .pr-campo{font-size:9pt;margin-top:6pt}
+  .pr-campo b{display:block;font-size:7.5pt;letter-spacing:.09em;text-transform:uppercase;color:#666;margin-bottom:1pt}
+  .pr-foot{margin-top:14pt;padding-top:5pt;border-top:.8pt solid #0C2340;font-size:8pt;color:#666;display:flex;justify-content:space-between}
+  .pr-quebra{page-break-before:always}
+}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media(min-width:720px){
   body{max-width:760px;margin:0 auto;background:var(--paper)}
@@ -268,13 +304,24 @@ textarea{min-height:84px;resize:vertical}
   <div class="backdrop" data-mclose></div>
   <div class="mcard">
     <div class="mnote" id="mnote"></div>
+    <button id="mPrint">Imprimir / salvar em PDF</button>
     <button id="mExport">Baixar backup (.json)</button>
     <button id="mExportCsv">Exportar planilha (.csv)</button>
     <button id="mImport">Restaurar backup</button>
     <button id="mReset" class="warn">Apagar tudo que preenchi</button>
   </div>
 </div>
+<div class="menu" id="menuPdf">
+  <div class="backdrop" data-pclose></div>
+  <div class="mcard">
+    <div class="mnote" id="pnote"></div>
+    <button data-pr="roteiro">Roteiro de visita<br><small>Lista por câmara, com quadradinho para marcar à mão</small></button>
+    <button data-pr="fichas">Fichas individuais<br><small>Uma ficha por desembargador, com linhas para escrever</small></button>
+    <button data-pr="feito">Relatório do que já foi feito<br><small>Só os visitados, com data e quem foi</small></button>
+  </div>
+</div>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
+<div id="printArea"></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -539,6 +586,115 @@ function salvar(){
   toast(ok ? 'Ficha salva' : 'Salvo só nesta sessão');
 }
 
+
+/* ---------- impressão / PDF ---------- */
+function descricaoFiltro(){
+  const partes = [];
+  if(f.secao) partes.push('Seção ' + f.secao);
+  if(f.camara) partes.push(f.camara);
+  if(f.canal) partes.push('canal: ' + f.canal);
+  if(f.status === '__seminfo') partes.push('sem informação de despacho');
+  else if(f.status) partes.push(f.status.toLowerCase());
+  if(f.q) partes.push('busca por "' + f.q + '"');
+  return partes.length ? partes.join(' · ') : 'Todos os desembargadores';
+}
+
+function cabecalhoImpressao(titulo, sub, n){
+  return `<div class="pr-head">
+    <h1>${esc(titulo)}</h1>
+    <p>${esc(sub)} — ${n} ${n===1?'desembargador':'desembargadores'} · gerado em ${new Date().toLocaleDateString('pt-BR')}</p>
+  </div>`;
+}
+function rodapeImpressao(){
+  return `<div class="pr-foot"><span>Despachos TJRJ — roteiro de visitação</span><span>${new Date().toLocaleDateString('pt-BR')}</span></div>`;
+}
+const ouVazio = (v, alt) => v ? esc(v) : '<span class="pr-vazio">' + alt + '</span>';
+
+function imprimirRoteiro(res){
+  const grupos = {};
+  res.forEach(d=>{ (grupos[d.camara] = grupos[d.camara] || []).push(d); });
+  const ordem = Object.keys(grupos).sort((a,b)=>((parseInt(a)||99)-(parseInt(b)||99)) || a.localeCompare(b,'pt'));
+  const corpo = ordem.map(cam=>{
+    const itens = grupos[cam].map(d=>{
+      const r = reg(d.id);
+      const horario = r.dias || d.presencial || '';
+      const agenda = r.agendamento || d.video || '';
+      const contato = [r.email || (d.emails||[])[0] || '', r.telefone || (d.tels||[])[0] || ''].filter(Boolean).join(' · ');
+      return `<div class="pr-item">
+        <div class="pr-box ${r.status==='Visitado'?'on':''}"></div>
+        <div class="pr-body">
+          <div class="pr-nome">${esc(d.nome)}<span>${esc(canalDe(d))}${r.status!=='A visitar'?' · '+esc(r.status):''}</span></div>
+          <div class="pr-linha"><b>Quando:</b> ${ouVazio(horario, 'a confirmar')}</div>
+          ${agenda?`<div class="pr-linha"><b>Como:</b> ${esc(agenda)}</div>`:''}
+          <div class="pr-linha"><b>Contato:</b> ${ouVazio(contato, 'a levantar')}${r.sala?' · Sala '+esc(r.sala):''}</div>
+          <div class="pr-rule"></div>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="pr-cam">${esc(cam)} — ${grupos[cam].filter(d=>reg(d.id).status==='Visitado').length}/${grupos[cam].length} visitados</div>${itens}`;
+  }).join('');
+  return cabecalhoImpressao('Roteiro de visitação — Desembargadores TJRJ', descricaoFiltro(), res.length) + corpo + rodapeImpressao();
+}
+
+function imprimirFichas(res){
+  const corpo = res.map(d=>{
+    const r = reg(d.id);
+    const contato = [r.email || (d.emails||[])[0] || '', r.telefone || (d.tels||[])[0] || ''].filter(Boolean).join(' · ');
+    return `<div class="pr-ficha">
+      <h2>${esc(d.nome)}</h2>
+      <p class="sub">${esc(d.camara)}${d.presidenteCamara?' · Presidente da câmara':''}${d.orgaoEspecial?' · Órgão Especial':''} — ${esc(r.status)}</p>
+      <div class="pr-campo"><b>Como despacha</b>${ouVazio(canalDe(d)==='Sem informação'?'':canalDe(d), '____________________________')}</div>
+      <div class="pr-campo"><b>Dias e horários</b>${ouVazio(r.dias || d.presencial, '________________________________________________')}</div>
+      <div class="pr-campo"><b>Como agendar</b>${ouVazio(r.agendamento || d.video, '________________________________________________')}</div>
+      <div class="pr-campo"><b>Contato do gabinete</b>${ouVazio(contato, '________________________________________________')}</div>
+      <div class="pr-campo"><b>Sala / andar</b>${ouVazio(r.sala, '________________________________________________')}</div>
+      <div class="pr-campo"><b>Data da visita e quem foi</b>${ouVazio([dataBR(r.dataVisita), r.quemVisitou].filter(Boolean).join(' — '), '________________________________________________')}</div>
+      <div class="pr-campo"><b>Anotações</b>${r.notas?esc(r.notas):'<div class="pr-rule"></div><div class="pr-rule"></div><div class="pr-rule"></div>'}</div>
+    </div>`;
+  }).join('');
+  return cabecalhoImpressao('Fichas de visitação — Desembargadores TJRJ', descricaoFiltro(), res.length) + corpo + rodapeImpressao();
+}
+
+function imprimirFeito(res){
+  const feitos = res.filter(d=>reg(d.id).status==='Visitado')
+    .sort((a,b)=>(reg(b.id).dataVisita||'').localeCompare(reg(a.id).dataVisita||''));
+  if(!feitos.length){
+    return cabecalhoImpressao('Visitas realizadas — Desembargadores TJRJ', descricaoFiltro(), 0) +
+           '<p class="pr-linha pr-vazio">Nenhuma visita marcada como realizada nesta seleção.</p>' + rodapeImpressao();
+  }
+  const corpo = feitos.map(d=>{
+    const r = reg(d.id);
+    return `<div class="pr-item">
+      <div class="pr-box on"></div>
+      <div class="pr-body">
+        <div class="pr-nome">${esc(d.nome)}<span>${esc(d.camara)}</span></div>
+        <div class="pr-linha"><b>Visita:</b> ${ouVazio([dataBR(r.dataVisita), r.quemVisitou].filter(Boolean).join(' — '), 'sem data registrada')}</div>
+        ${r.notas?`<div class="pr-linha"><b>Anotações:</b> ${esc(r.notas)}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+  return cabecalhoImpressao('Visitas realizadas — Desembargadores TJRJ', descricaoFiltro(), feitos.length) + corpo + rodapeImpressao();
+}
+
+function imprimir(tipo){
+  const res = filtrar();
+  const html = tipo==='fichas' ? imprimirFichas(res) : tipo==='feito' ? imprimirFeito(res) : imprimirRoteiro(res);
+  el('printArea').innerHTML = html;
+  el('menuPdf').classList.remove('open');
+  setTimeout(()=>window.print(), 120);
+}
+
+el('mPrint').addEventListener('click', ()=>{
+  el('menu').classList.remove('open');
+  el('pnote').textContent = 'Sai com o filtro atual: ' + descricaoFiltro() + '. Na tela de impressão do celular, escolha "Salvar em PDF".';
+  el('menuPdf').classList.add('open');
+});
+el('menuPdf').addEventListener('click', e=>{
+  const b = e.target.closest('button[data-pr]'); if(!b) return;
+  imprimir(b.dataset.pr);
+});
+document.querySelectorAll('[data-pclose]').forEach(b=>b.addEventListener('click', ()=>el('menuPdf').classList.remove('open')));
+
 /* ---------- tema claro / escuro ---------- */
 const TEMA_KEY = 'tjrj_tema';
 function pintarTema(t){
@@ -576,7 +732,7 @@ el('limpar').addEventListener('click', ()=>{
 el('lista').addEventListener('click', e=>{ const c = e.target.closest('.card'); if(c) abrir(c.dataset.id); });
 el('salvar').addEventListener('click', salvar);
 document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', fechar));
-document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ fechar(); el('menu').classList.remove('open'); } });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ fechar(); el('menu').classList.remove('open'); el('menuPdf').classList.remove('open'); } });
 
 /* ---------- menu / backup ---------- */
 el('menuBtn').addEventListener('click', ()=>{
