@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#E9ECE7">
+<meta name="robots" content="noindex">
+<title>BUSSOLA — diagnóstico</title>
+<style>
+/* Duas telas de 390x844 lado a lado numa mesa; empilham no celular.
+   Toque numa dívida para abrir de onde veio cada número. */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;500;600&display=swap');
+
+:root{
+  --mesa:#E9ECE7;
+  --tela:#FFFFFF;
+  --tinta:#121A17;
+  --fraco:#4C564F;
+  --linha:#DCE1DB;
+  --acao:#0E5C4F;
+  --acao-fundo:#E4EFEB;
+  --acao-linha:#BBD6CE;
+  --alerta:#A33A22;
+  --risco:#7E2A17;
+  --atencao:#6F5410;
+  --neutro-chip:#EBEEE9;
+  --display:'Archivo',system-ui,sans-serif;
+  --corpo:'Public Sans',system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --mesa:#0F1310; --tela:#181D19; --tinta:#E8EDE8; --fraco:#9BA69E; --linha:#2B322C;
+    --acao:#6ECFB8; --acao-fundo:#17322C; --acao-linha:#27524810;
+    --acao-linha:#2A544A; --alerta:#F0917A; --risco:#F0A58F; --atencao:#D8B257;
+    --neutro-chip:#222825; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --mesa:#0F1310; --tela:#181D19; --tinta:#E8EDE8; --fraco:#9BA69E; --linha:#2B322C;
+  --acao:#6ECFB8; --acao-fundo:#17322C; --acao-linha:#2A544A; --alerta:#F0917A;
+  --risco:#F0A58F; --atencao:#D8B257; --neutro-chip:#222825; color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{background:var(--mesa);color:var(--tinta);font-family:var(--corpo);margin:0}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 40px;max-width:1040px;margin:0 auto}
+
+.cabeca{margin-bottom:22px}
+.cabeca h1{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance}
+.cabeca p{margin:0;font-size:13px;color:var(--fraco);line-height:1.5;max-width:60ch}
+
+.mesa{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.frame{width:390px;max-width:100%;flex:0 1 390px;min-width:0}
+.rotulo{font-family:var(--display);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--fraco);margin-bottom:8px}
+.tela{height:844px;max-height:80vh;overflow-y:auto;background:var(--tela);border:1px solid var(--linha);border-radius:22px;padding:26px 20px 24px;display:flex;flex-direction:column}
+
+.topo{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px}
+.marca{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--fraco)}
+.data{font-size:12px;color:var(--fraco)}
+h2{font-family:var(--display);font-weight:700;font-size:25px;letter-spacing:-.02em;margin:0 0 4px}
+.sub{margin:0 0 18px;font-size:13px;color:var(--fraco);line-height:1.5}
+
+.heroi{border:1px solid var(--linha);border-radius:14px;padding:18px;margin-bottom:14px}
+.heroi .et{font-family:var(--display);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--alerta);margin-bottom:8px}
+.numero{font-family:var(--display);font-weight:700;font-size:42px;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.heroi .nota{font-size:13px;color:var(--fraco);margin-top:9px;line-height:1.45}
+
+.grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.bloco{border:1px solid var(--linha);border-radius:12px;padding:13px;min-width:0}
+.bloco .et{font-size:11px;color:var(--fraco);margin-bottom:6px}
+.bloco .v{font-family:var(--display);font-weight:600;font-size:19px;font-variant-numeric:tabular-nums}
+.bloco .pe{font-size:10px;color:var(--fraco);margin-top:4px;line-height:1.35}
+.verde{color:var(--acao)}
+
+.oportunidade{background:var(--acao-fundo);border:1px solid var(--acao-linha);border-radius:14px;padding:16px;margin-bottom:16px}
+.oportunidade .et{font-family:var(--display);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--acao);margin-bottom:8px}
+.oportunidade p{margin:0 0 10px;font-size:14px;line-height:1.5}
+.oportunidade .v{font-family:var(--display);font-weight:700;font-size:22px;color:var(--acao);font-variant-numeric:tabular-nums}
+.oportunidade .lei{font-size:11px;color:var(--fraco);margin-top:8px;line-height:1.4}
+
+.botao{display:flex;align-items:center;justify-content:center;min-height:52px;background:var(--tinta);color:var(--tela);border:0;border-radius:12px;font-family:var(--display);font-size:15px;font-weight:600;cursor:pointer;margin-top:auto;width:100%}
+.voltar{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--fraco);font-family:var(--corpo);font-size:13px;cursor:pointer;padding:6px 0;margin-bottom:12px;min-height:44px}
+.botao:focus-visible,.voltar:focus-visible,.divida:focus-visible{outline:2px solid var(--acao);outline-offset:2px}
+
+.lista{display:flex;flex-direction:column;gap:10px}
+.divida{display:block;width:100%;text-align:left;background:none;border:1px solid var(--linha);border-left:4px solid var(--linha);border-radius:12px;padding:13px;font-family:var(--corpo);color:inherit;cursor:pointer}
+.divida.f1{border-left-color:var(--risco)}
+.divida.f2{border-left-color:var(--alerta)}
+.divida.f3{border-left-color:var(--atencao)}
+.linha1{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.nome{font-weight:600;font-size:15px}
+.saldo{font-family:var(--display);font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+.faixa{font-family:var(--display);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin:7px 0 6px}
+.f1 .faixa{color:var(--risco)}
+.f2 .faixa{color:var(--alerta)}
+.f3 .faixa{color:var(--atencao)}
+.linha2{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.taxa{font-size:12px;color:var(--fraco);font-variant-numeric:tabular-nums}
+.chip{font-size:10px;border-radius:999px;padding:3px 8px;white-space:nowrap;background:var(--neutro-chip);color:var(--fraco)}
+.chip.ok{background:var(--acao-fundo);color:var(--acao)}
+.chip.chute{background:var(--neutro-chip);color:var(--atencao)}
+.premissas{margin-top:11px;padding-top:11px;border-top:1px dashed var(--linha)}
+.premissas .t{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--fraco);margin-bottom:7px}
+.premissas ul{margin:0;padding-left:16px}
+.premissas li{font-size:12px;color:var(--fraco);line-height:1.5;margin-bottom:5px}
+.toque{font-size:11px;color:var(--fraco);margin:12px 0 0;text-align:center}
+.rodape{margin-top:16px;border-top:1px solid var(--linha);padding-top:14px}
+.rodape .t{font-family:var(--display);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--fraco);margin-bottom:8px}
+.rodape p{margin:0;font-size:13px;color:var(--fraco);line-height:1.5}
+@media (prefers-reduced-motion: no-preference){.tela{scroll-behavior:smooth}}
+</style>
+<style>
+html,body{min-height:100%}
+body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="cabeca">
+    <h1>BUSSOLA — mockup das telas de diagnóstico</h1>
+    <p>Todos os números saem do pipeline rodando contra as fixtures: renda de R$ 9.500, essenciais de R$ 2.600 e sete dívidas no formato da Pluggy. Toque em qualquer dívida da segunda tela para ver de onde veio cada número.</p>
+  </div>
+
+  <div class="mesa">
+
+    <div class="frame">
+      <div class="rotulo">Tela 1 · Diagnóstico</div>
+      <div class="tela" id="tela1">
+        <div class="topo">
+          <span class="marca">BUSSOLA</span>
+          <span class="data">23 de outubro</span>
+        </div>
+
+        <h2>Seu diagnóstico</h2>
+        <p class="sub">Atualizado com os dados das suas contas conectadas.</p>
+
+        <div class="heroi">
+          <div class="et">Juros que você paga por mês</div>
+          <div class="numero">R$ 1.540</div>
+          <div class="nota">Esse valor some todo mês sem abater nada do que você deve.</div>
+        </div>
+
+        <div class="grade">
+          <div class="bloco">
+            <div class="et">Dívida de consumo</div>
+            <div class="v">R$ 39.950</div>
+          </div>
+          <div class="bloco">
+            <div class="et">Comprometimento</div>
+            <div class="v">27,3%</div>
+          </div>
+          <div class="bloco">
+            <div class="et">Sobra no mês</div>
+            <div class="v verde">R$ 2.455</div>
+          </div>
+          <div class="bloco">
+            <div class="et">Moradia</div>
+            <div class="v">R$ 1.850</div>
+            <div class="pe">custo de vida, não entra no indicador</div>
+          </div>
+        </div>
+
+        <div class="oportunidade">
+          <div class="et">Dinheiro na mesa</div>
+          <p>Quitar o financiamento do veículo hoje custa <strong>R$ 14.004</strong>, e não os <strong>R$ 19.200</strong> das parcelas que faltam.</p>
+          <div class="v">Economia de R$ 5.196</div>
+          <div class="lei">Você tem direito ao desconto proporcional dos juros. Art. 52, §2º do CDC.</div>
+        </div>
+
+        <button class="botao" id="irPlano">Ver plano de ação</button>
+      </div>
+    </div>
+
+    <div class="frame">
+      <div class="rotulo">Tela 2 · Plano de ação</div>
+      <div class="tela" id="tela2">
+        <button class="voltar" id="voltar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+          Diagnóstico
+        </button>
+
+        <h2>Sua fila de ataque</h2>
+        <p class="sub">Todo dinheiro que sobrar vai para o primeiro da fila. Quando ele morre, a parcela liberada desce para o próximo.</p>
+
+        <div class="lista">
+
+          <button class="divida f1" aria-expanded="false">
+            <span class="linha1"><span class="nome">Financiamento do veículo</span><span class="saldo">R$ 14.000</span></span>
+            <div class="faixa">Risco de perder o bem · 1 parcela em atraso</div>
+            <span class="linha2"><span class="taxa">2,70% a.m. · queima R$ 377/mês</span><span class="chip ok">taxa informada</span></span>
+            <div class="premissas" hidden>
+              <div class="t">De onde vieram os números</div>
+              <ul>
+                <li>Taxa anual efetiva de 37,60% convertida para mensal por capitalização composta.</li>
+                <li>Valor da parcela obtido do último pagamento registrado — o contrato não informa o valor da parcela.</li>
+                <li>Contrato com garantia de alienação fiduciária do veículo.</li>
+              </ul>
+            </div>
+          </button>
+
+          <button class="divida f2" aria-expanded="false">
+            <span class="linha1"><span class="nome">Cartão Platinum</span><span class="saldo">R$ 3.800</span></span>
+            <div class="faixa">Juro tóxico · rotativo</div>
+            <span class="linha2"><span class="taxa">15,00% a.m. · queima R$ 570/mês</span><span class="chip chute">taxa estimada</span></span>
+            <div class="premissas" hidden>
+              <div class="t">De onde vieram os números</div>
+              <ul>
+                <li>Taxa não informada pela instituição. Usada a média de mercado da modalidade, 15,00% ao mês.</li>
+                <li>Pagamento mínimo estimado em 15% do saldo.</li>
+                <li>Mapeamento de cartão ainda não validado contra retorno real da Pluggy.</li>
+              </ul>
+            </div>
+          </button>
+
+          <button class="divida f2" aria-expanded="false">
+            <span class="linha1"><span class="nome">Cheque especial</span><span class="saldo">R$ 1.450</span></span>
+            <div class="faixa">Juro tóxico · limite da conta</div>
+            <span class="linha2"><span class="taxa">7,90% a.m. · queima R$ 115/mês</span><span class="chip ok">taxa informada</span></span>
+            <div class="premissas" hidden>
+              <div class="t">De onde vieram os números</div>
+              <ul>
+                <li>Taxa recebida como 7.9 e interpretada como percentual ao mês, não como fração.</li>
+                <li>Contrato sem prazo definido: o saldo rola enquanto não for pago.</li>
+              </ul>
+            </div>
+          </button>
+
+          <button class="divida f3" aria-expanded="false">
+            <span class="linha1"><span class="nome">Empréstimo pessoal</span><span class="saldo">R$ 8.200</span></span>
+            <div class="faixa">Maior taxa primeiro</div>
+            <span class="linha2"><span class="taxa">2,93% a.m. · queima R$ 241/mês</span><span class="chip ok">taxa informada</span></span>
+            <div class="premissas" hidden>
+              <div class="t">De onde vieram os números</div>
+              <ul>
+                <li>Taxa de juros não informada. Usado o CET do contrato, tratado como taxa anual efetiva — inclui tarifas além do juro.</li>
+                <li>Parcela de R$ 520 obtida do último pagamento registrado.</li>
+                <li>Quitando hoje: R$ 7.783 em vez de R$ 10.400.</li>
+              </ul>
+            </div>
+          </button>
+
+          <button class="divida f3" aria-expanded="false">
+            <span class="linha1"><span class="nome">Crediário da loja</span><span class="saldo">R$ 1.500</span></span>
+            <div class="faixa">Maior taxa primeiro</div>
+            <span class="linha2"><span class="taxa">2,79% a.m. · queima R$ 42/mês</span><span class="chip">taxa inferida</span></span>
+            <div class="premissas" hidden>
+              <div class="t">De onde vieram os números</div>
+              <ul>
+                <li>A instituição não informou taxa nem CET. Calculada em 2,79% ao mês a partir do saldo, da parcela e das 6 prestações que faltam.</li>
+                <li>Quitando hoje: R$ 1.500 em vez de R$ 1.650.</li>
+              </ul>
+            </div>
+          </button>
+
+        </div>
+
+        <p class="toque">Toque em uma dívida para ver de onde vieram os números</p>
+
+        <div class="rodape">
+          <div class="t">Não antecipar</div>
+          <p>Consignado a 1,78% e financiamento da casa a 0,88% ao mês. Adiantar aqui rende menos do que atacar a fila acima — pague só a parcela.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  var t1 = document.getElementById('tela1');
+  var t2 = document.getElementById('tela2');
+
+  document.getElementById('irPlano').addEventListener('click', function(){
+    t2.scrollIntoView({behavior:'smooth', block:'nearest', inline:'nearest'});
+    t2.focus({preventScroll:true});
+  });
+  document.getElementById('voltar').addEventListener('click', function(){
+    t1.scrollIntoView({behavior:'smooth', block:'nearest', inline:'nearest'});
+  });
+
+  var itens = document.querySelectorAll('.divida');
+  for (var i = 0; i < itens.length; i++) {
+    itens[i].addEventListener('click', function(){
+      var p = this.querySelector('.premissas');
+      var aberto = !p.hidden;
+      p.hidden = aberto;
+      this.setAttribute('aria-expanded', String(!aberto));
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
